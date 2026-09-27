@@ -638,56 +638,119 @@ void CDarkNamerDlg::ManualChange()
 
 // ---------------------------------------------------------------
 // 와일드카드 바꾸기 (DarkNamerPlus 추가 기능)
-//   찾을 문자열에 * 또는 ? 가 있으면 패턴으로 찾는다. (텍스트 에디터처럼 이름 중간에서도 찾음)
-//   *  : 아무 글자 0개 이상 (가능한 짧게. 단, 패턴 맨 끝의 * 는 이름 끝까지)
+//   찾을 문자열에 * 또는 ? 가 있으면 패턴으로 찾는다. (이름 중간에서도 찾고, 찾은 곳은 모두 바꿈)
+//   *  : 한 조각. * 바로 앞뒤에 있는 글자(구분 글자)를 넘지 않는 1글자 이상
+//   ** : 이어진 조각. 구분 글자를 넘어서 최대한 길게 (1글자 이상)
 //   ?  : 아무 글자 1개
-//   바꿀 문자열의 * 는 찾은 * 부분을, ? 는 찾은 ? 글자를 순서대로 넣는다.
-//   *1 ~ *9 는 해당 번호의 * 부분을 넣는다. (순서 바꾸기용)
+//   바꿀 문자열의 * 는 찾은 * / ** 부분을, ? 는 찾은 ? 글자를 순서대로 넣는다.
+//   *1 ~ *9 는 해당 번호의 * / ** 부분을 넣는다. (순서 바꾸기, 안 쓴 번호는 삭제)
 //   찾을 문자열에 점(.)이 없으면 확장자를 뺀 이름에서만 찾고 확장자는 유지한다.
 //   영문 대소문자는 구분하지 않는다. 찾는 부분이 없으면 이름은 그대로 둔다.
 // ---------------------------------------------------------------
-// s 의 맨 앞부분이 패턴 p 와 맞으면 TRUE, 맞은 부분의 끝을 pEnd 로 돌려준다
-static BOOL WildMatch(LPCTSTR p, LPCTSTR s, CStringArray& stars, CStringArray& qs, LPCTSTR& pEnd)
+enum { WT_LIT = 0, WT_STAR, WT_DSTAR, WT_Q };
+
+struct WildTok
 {
-	if (*p == 0) { pEnd = s; return TRUE; }
-	if (*p == _T('*'))
-	{
-		if (p[1] == 0)	// 패턴 맨 끝의 * : 이름 끝까지
-		{
-			stars.Add(CString(s));
-			pEnd = s + _tcslen(s);
-			return TRUE;
-		}
-		int idx = (int)stars.Add(_T(""));
-		int nq = (int)qs.GetSize();
-		for (LPCTSTR t = s; ; t++)	// 짧은 것부터 시도
-		{
-			stars.SetSize(idx + 1);
-			qs.SetSize(nq);
-			stars[idx] = CString(s, (int)(t - s));
-			if (WildMatch(p + 1, t, stars, qs, pEnd)) return TRUE;
-			if (*t == 0) break;
-		}
-		stars.SetSize(idx);
-		qs.SetSize(nq);
-		return FALSE;
-	}
-	if (*s == 0) return FALSE;
-	if (*p == _T('?'))
-	{
-		int ns = (int)stars.GetSize();
-		int idx = (int)qs.Add(CString(*s));
-		if (WildMatch(p + 1, s + 1, stars, qs, pEnd)) return TRUE;
-		stars.SetSize(ns);
-		qs.SetSize(idx);
-		return FALSE;
-	}
-	if (_totlower(*p) != _totlower(*s)) return FALSE;
-	return WildMatch(p + 1, s + 1, stars, qs, pEnd);
+	int nType;
+	CString str;	// WT_LIT : 글자들,  WT_STAR : 구분 글자들
+};
+
+static BOOL WildSameChar(TCHAR a, TCHAR b)
+{
+	return _totlower(a) == _totlower(b);
 }
 
-static CString WildReplace(const CString& strRep, const CStringArray& stars, const CStringArray& qs)
+static void WildParse(const CString& strPat, std::vector<WildTok>& toks)
 {
+	toks.clear();
+	int nLen = strPat.GetLength();
+	for (int i = 0; i < nLen; i++)
+	{
+		TCHAR c = strPat[i];
+		WildTok t;
+		if (c == _T('*'))
+		{
+			if (i + 1 < nLen && strPat[i+1] == _T('*')) { t.nType = WT_DSTAR; i++; }
+			else t.nType = WT_STAR;
+			toks.push_back(t);
+		}
+		else if (c == _T('?'))
+		{
+			t.nType = WT_Q;
+			toks.push_back(t);
+		}
+		else
+		{
+			if (!toks.empty() && toks.back().nType == WT_LIT) toks.back().str += c;
+			else { t.nType = WT_LIT; t.str = c; toks.push_back(t); }
+		}
+	}
+	// * 의 구분 글자 = 바로 앞 글자묶음의 마지막 글자 + 바로 뒤 글자묶음의 첫 글자
+	for (size_t k = 0; k < toks.size(); k++)
+	{
+		if (toks[k].nType != WT_STAR) continue;
+		if (k > 0 && toks[k-1].nType == WT_LIT)
+			toks[k].str += toks[k-1].str[toks[k-1].str.GetLength() - 1];
+		if (k + 1 < toks.size() && toks[k+1].nType == WT_LIT)
+			toks[k].str += toks[k+1].str[0];
+	}
+}
+
+// s[nPos] 부터 패턴이 맞으면 맞은 부분의 끝 위치, 안 맞으면 -1
+static int WildMatchAt(const std::vector<WildTok>& toks, size_t k, LPCTSTR s, int nPos, int nLen, std::vector<CString>& caps)
+{
+	if (k == toks.size()) return nPos;
+	const WildTok& t = toks[k];
+	switch (t.nType)
+	{
+	case WT_LIT:
+		{
+			int n = t.str.GetLength();
+			if (nPos + n > nLen) return -1;
+			for (int i = 0; i < n; i++)
+				if (!WildSameChar(t.str[i], s[nPos + i])) return -1;
+			return WildMatchAt(toks, k + 1, s, nPos + n, nLen, caps);
+		}
+	case WT_Q:
+		if (nPos >= nLen) return -1;
+		caps[k] = CString(s + nPos, 1);
+		return WildMatchAt(toks, k + 1, s, nPos + 1, nLen, caps);
+	case WT_STAR:
+	case WT_DSTAR:
+		{
+			int nMax = nLen;
+			if (t.nType == WT_STAR)	// 구분 글자가 나오기 전까지만
+			{
+				nMax = nPos;
+				while (nMax < nLen)
+				{
+					BOOL bStop = FALSE;
+					for (int j = 0; j < t.str.GetLength(); j++)
+						if (WildSameChar(t.str[j], s[nMax])) { bStop = TRUE; break; }
+					if (bStop) break;
+					nMax++;
+				}
+			}
+			for (int e = nMax; e > nPos; e--)	// 길게부터 시도
+			{
+				caps[k] = CString(s + nPos, e - nPos);
+				int r = WildMatchAt(toks, k + 1, s, e, nLen, caps);
+				if (r >= 0) return r;
+			}
+			return -1;
+		}
+	}
+	return -1;
+}
+
+static CString WildReplace(const CString& strRep, const std::vector<WildTok>& toks, const std::vector<CString>& caps)
+{
+	std::vector<CString> stars, qs;
+	for (size_t k = 0; k < toks.size(); k++)
+	{
+		if (toks[k].nType == WT_STAR || toks[k].nType == WT_DSTAR) stars.push_back(caps[k]);
+		else if (toks[k].nType == WT_Q) qs.push_back(caps[k]);
+	}
 	CString strOut;
 	int nStar = 0, nQ = 0;
 	int nLen = strRep.GetLength();
@@ -696,6 +759,7 @@ static CString WildReplace(const CString& strRep, const CStringArray& stars, con
 		TCHAR c = strRep[i];
 		if (c == _T('*'))
 		{
+			if (i + 1 < nLen && strRep[i+1] == _T('*')) i++;	// ** 도 * 와 같게
 			int n;
 			if (i + 1 < nLen && strRep[i+1] >= _T('1') && strRep[i+1] <= _T('9'))
 			{
@@ -703,11 +767,11 @@ static CString WildReplace(const CString& strRep, const CStringArray& stars, con
 				i++;
 			}
 			else n = nStar++;
-			if (n < stars.GetSize()) strOut += stars[n];
+			if (n < (int)stars.size()) strOut += stars[n];
 		}
 		else if (c == _T('?'))
 		{
-			if (nQ < qs.GetSize()) strOut += qs[nQ];
+			if (nQ < (int)qs.size()) strOut += qs[nQ];
 			nQ++;
 		}
 		else strOut += c;
@@ -728,24 +792,28 @@ static BOOL WildRename(CString& strName, const CString& strFind, const CString& 
 			strExt = strName.Mid(nDot);
 		}
 	}
+	std::vector<WildTok> toks;
+	WildParse(strFind, toks);
+
+	LPCTSTR s = strBody;
+	int nLen = strBody.GetLength();
 	CString strOut;
 	BOOL bFound = FALSE;
-	LPCTSTR cur = strBody;
-	while (*cur)
+	int i = 0;
+	while (i < nLen)
 	{
-		CStringArray stars, qs;
-		LPCTSTR pEnd = cur;
-		if (WildMatch(strFind, cur, stars, qs, pEnd))
+		std::vector<CString> caps(toks.size());
+		int r = WildMatchAt(toks, 0, s, i, nLen, caps);
+		if (r > i)
 		{
-			strOut += WildReplace(strRep, stars, qs);
+			strOut += WildReplace(strRep, toks, caps);
 			bFound = TRUE;
-			if (pEnd == cur) { strOut += *cur; cur++; }	// 빈 문자열로 맞은 경우 한 글자 전진
-			else cur = pEnd;
+			i = r;
 		}
 		else
 		{
-			strOut += *cur;
-			cur++;
+			strOut += s[i];
+			i++;
 		}
 	}
 	if (!bFound) return FALSE;
