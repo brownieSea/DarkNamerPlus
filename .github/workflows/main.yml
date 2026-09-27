@@ -21,7 +21,7 @@ jobs:
         run: |
           rc /nologo /l 0x412 /d NDEBUG /d _UNICODE /d UNICODE /fo DarkNamer.res DarkNamer.rc
           if errorlevel 1 exit /b 1
-          cl /nologo /c /EHsc /O2 /MT /W1 /Zc:forScope- /source-charset:.949 /execution-charset:.949 /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /D _WIN32_WINNT=0x0601 /D _CRT_SECURE_NO_WARNINGS DarkNamer.cpp DarkNamerDlg.cpp DlgInput.cpp EtcFunctions.cpp StdAfx.cpp FOLDERDIALOG.CPP
+          cl /nologo /c /EHsc /O2 /MT /W1 /Zc:forScope- /utf-8 /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /D _WIN32_WINNT=0x0601 /D _CRT_SECURE_NO_WARNINGS DarkNamer.cpp DarkNamerDlg.cpp DlgInput.cpp EtcFunctions.cpp StdAfx.cpp FOLDERDIALOG.CPP
           if errorlevel 1 exit /b 1
           link /nologo /subsystem:windows /entry:wWinMainCRTStartup /out:DarkNamer.exe DarkNamer.obj DarkNamerDlg.obj DlgInput.obj EtcFunctions.obj StdAfx.obj FOLDERDIALOG.obj DarkNamer.res
           if errorlevel 1 exit /b 1
