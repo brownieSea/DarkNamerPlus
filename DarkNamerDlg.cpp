@@ -636,18 +636,116 @@ void CDarkNamerDlg::ManualChange()
 	}
 }
 
+// ---------------------------------------------------------------
+// 와일드카드 바꾸기 (DarkNamerPlus 추가 기능)
+//   찾을 문자열에 * 또는 ? 가 있으면 패턴으로 비교한다.
+//   *  : 아무 글자 0개 이상,  ? : 아무 글자 1개
+//   바꿀 문자열의 * 는 찾은 * 부분을, ? 는 찾은 ? 글자를 순서대로 넣는다.
+//   *1 ~ *9 는 해당 번호의 * 부분을 넣는다. (순서 바꾸기용)
+//   찾을 문자열에 점(.)이 없으면 확장자를 뺀 이름만 비교하고 확장자는 유지한다.
+//   영문 대소문자는 구분하지 않는다. 패턴에 맞지 않는 이름은 그대로 둔다.
+// ---------------------------------------------------------------
+static BOOL WildMatch(LPCTSTR p, LPCTSTR s, CStringArray& stars, CStringArray& qs)
+{
+	if (*p == 0) return (*s == 0);
+	if (*p == _T('*'))
+	{
+		int idx = (int)stars.Add(_T(""));
+		int nq = (int)qs.GetSize();
+		for (LPCTSTR t = s; ; t++)	// 짧은 것부터 시도
+		{
+			stars.SetSize(idx + 1);
+			qs.SetSize(nq);
+			stars[idx] = CString(s, (int)(t - s));
+			if (WildMatch(p + 1, t, stars, qs)) return TRUE;
+			if (*t == 0) break;
+		}
+		stars.SetSize(idx);
+		qs.SetSize(nq);
+		return FALSE;
+	}
+	if (*s == 0) return FALSE;
+	if (*p == _T('?'))
+	{
+		int ns = (int)stars.GetSize();
+		int idx = (int)qs.Add(CString(*s));
+		if (WildMatch(p + 1, s + 1, stars, qs)) return TRUE;
+		stars.SetSize(ns);
+		qs.SetSize(idx);
+		return FALSE;
+	}
+	if (_totlower(*p) != _totlower(*s)) return FALSE;
+	return WildMatch(p + 1, s + 1, stars, qs);
+}
+
+static CString WildReplace(const CString& strRep, const CStringArray& stars, const CStringArray& qs)
+{
+	CString strOut;
+	int nStar = 0, nQ = 0;
+	int nLen = strRep.GetLength();
+	for (int i = 0; i < nLen; i++)
+	{
+		TCHAR c = strRep[i];
+		if (c == _T('*'))
+		{
+			int n;
+			if (i + 1 < nLen && strRep[i+1] >= _T('1') && strRep[i+1] <= _T('9'))
+			{
+				n = strRep[i+1] - _T('1');
+				i++;
+			}
+			else n = nStar++;
+			if (n < stars.GetSize()) strOut += stars[n];
+		}
+		else if (c == _T('?'))
+		{
+			if (nQ < qs.GetSize()) strOut += qs[nQ];
+			nQ++;
+		}
+		else strOut += c;
+	}
+	return strOut;
+}
+
+// 성공하면 strName 을 바꾸고 TRUE
+static BOOL WildRename(CString& strName, const CString& strFind, const CString& strRep)
+{
+	CString strBody = strName, strExt;
+	if (strFind.Find(_T('.')) == -1)	// 패턴에 점이 없으면 확장자는 따로 보관
+	{
+		int nDot = strName.ReverseFind(_T('.'));
+		if (nDot > 0)
+		{
+			strBody = strName.Left(nDot);
+			strExt = strName.Mid(nDot);
+		}
+	}
+	CStringArray stars, qs;
+	if (!WildMatch(strFind, strBody, stars, qs)) return FALSE;
+	strName = WildReplace(strRep, stars, qs) + strExt;
+	return TRUE;
+}
+
 void CDarkNamerDlg::NameReplace()
 {
 	CDlgInput dlg;
-	dlg.InitInputDlg(_T("이름에 들어있는 문자열을 바꿉니다."), _T("를"), _T("으로"));
+	dlg.InitInputDlg(_T("문자열을 바꿉니다. (*, ? 사용 가능)"), _T("를"), _T("으로"));
 
 	if (dlg.DoModal()==IDCANCEL) return;
 	CString strTemp;
+	BOOL bWild = (dlg.m_strReturn1.FindOneOf(_T("*?")) != -1);
 	m_list.SetRedraw(FALSE);
 	for (int i=0; i<m_list.GetItemCount(); i++)
 	{
 		strTemp=m_list.GetItemText(i, COL_NEWNAME);
-		strTemp.Replace(dlg.m_strReturn1, dlg.m_strReturn2);
+		if (bWild)
+		{
+			if (!WildRename(strTemp, dlg.m_strReturn1, dlg.m_strReturn2)) continue;	// 안 맞으면 그대로
+		}
+		else
+		{
+			strTemp.Replace(dlg.m_strReturn1, dlg.m_strReturn2);
+		}
 		m_list.SetItemText(i, COL_NEWNAME, strTemp);
 	}
 	m_list.SetRedraw(TRUE);
