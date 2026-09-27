@@ -638,18 +638,26 @@ void CDarkNamerDlg::ManualChange()
 
 // ---------------------------------------------------------------
 // 와일드카드 바꾸기 (DarkNamerPlus 추가 기능)
-//   찾을 문자열에 * 또는 ? 가 있으면 패턴으로 비교한다.
-//   *  : 아무 글자 0개 이상,  ? : 아무 글자 1개
+//   찾을 문자열에 * 또는 ? 가 있으면 패턴으로 찾는다. (텍스트 에디터처럼 이름 중간에서도 찾음)
+//   *  : 아무 글자 0개 이상 (가능한 짧게. 단, 패턴 맨 끝의 * 는 이름 끝까지)
+//   ?  : 아무 글자 1개
 //   바꿀 문자열의 * 는 찾은 * 부분을, ? 는 찾은 ? 글자를 순서대로 넣는다.
 //   *1 ~ *9 는 해당 번호의 * 부분을 넣는다. (순서 바꾸기용)
-//   찾을 문자열에 점(.)이 없으면 확장자를 뺀 이름만 비교하고 확장자는 유지한다.
-//   영문 대소문자는 구분하지 않는다. 패턴에 맞지 않는 이름은 그대로 둔다.
+//   찾을 문자열에 점(.)이 없으면 확장자를 뺀 이름에서만 찾고 확장자는 유지한다.
+//   영문 대소문자는 구분하지 않는다. 찾는 부분이 없으면 이름은 그대로 둔다.
 // ---------------------------------------------------------------
-static BOOL WildMatch(LPCTSTR p, LPCTSTR s, CStringArray& stars, CStringArray& qs)
+// s 의 맨 앞부분이 패턴 p 와 맞으면 TRUE, 맞은 부분의 끝을 pEnd 로 돌려준다
+static BOOL WildMatch(LPCTSTR p, LPCTSTR s, CStringArray& stars, CStringArray& qs, LPCTSTR& pEnd)
 {
-	if (*p == 0) return (*s == 0);
+	if (*p == 0) { pEnd = s; return TRUE; }
 	if (*p == _T('*'))
 	{
+		if (p[1] == 0)	// 패턴 맨 끝의 * : 이름 끝까지
+		{
+			stars.Add(CString(s));
+			pEnd = s + _tcslen(s);
+			return TRUE;
+		}
 		int idx = (int)stars.Add(_T(""));
 		int nq = (int)qs.GetSize();
 		for (LPCTSTR t = s; ; t++)	// 짧은 것부터 시도
@@ -657,7 +665,7 @@ static BOOL WildMatch(LPCTSTR p, LPCTSTR s, CStringArray& stars, CStringArray& q
 			stars.SetSize(idx + 1);
 			qs.SetSize(nq);
 			stars[idx] = CString(s, (int)(t - s));
-			if (WildMatch(p + 1, t, stars, qs)) return TRUE;
+			if (WildMatch(p + 1, t, stars, qs, pEnd)) return TRUE;
 			if (*t == 0) break;
 		}
 		stars.SetSize(idx);
@@ -669,13 +677,13 @@ static BOOL WildMatch(LPCTSTR p, LPCTSTR s, CStringArray& stars, CStringArray& q
 	{
 		int ns = (int)stars.GetSize();
 		int idx = (int)qs.Add(CString(*s));
-		if (WildMatch(p + 1, s + 1, stars, qs)) return TRUE;
+		if (WildMatch(p + 1, s + 1, stars, qs, pEnd)) return TRUE;
 		stars.SetSize(ns);
 		qs.SetSize(idx);
 		return FALSE;
 	}
 	if (_totlower(*p) != _totlower(*s)) return FALSE;
-	return WildMatch(p + 1, s + 1, stars, qs);
+	return WildMatch(p + 1, s + 1, stars, qs, pEnd);
 }
 
 static CString WildReplace(const CString& strRep, const CStringArray& stars, const CStringArray& qs)
@@ -707,7 +715,7 @@ static CString WildReplace(const CString& strRep, const CStringArray& stars, con
 	return strOut;
 }
 
-// 성공하면 strName 을 바꾸고 TRUE
+// 찾은 곳을 모두 바꾼다. 하나라도 바꿨으면 TRUE
 static BOOL WildRename(CString& strName, const CString& strFind, const CString& strRep)
 {
 	CString strBody = strName, strExt;
@@ -720,9 +728,28 @@ static BOOL WildRename(CString& strName, const CString& strFind, const CString& 
 			strExt = strName.Mid(nDot);
 		}
 	}
-	CStringArray stars, qs;
-	if (!WildMatch(strFind, strBody, stars, qs)) return FALSE;
-	strName = WildReplace(strRep, stars, qs) + strExt;
+	CString strOut;
+	BOOL bFound = FALSE;
+	LPCTSTR cur = strBody;
+	while (*cur)
+	{
+		CStringArray stars, qs;
+		LPCTSTR pEnd = cur;
+		if (WildMatch(strFind, cur, stars, qs, pEnd))
+		{
+			strOut += WildReplace(strRep, stars, qs);
+			bFound = TRUE;
+			if (pEnd == cur) { strOut += *cur; cur++; }	// 빈 문자열로 맞은 경우 한 글자 전진
+			else cur = pEnd;
+		}
+		else
+		{
+			strOut += *cur;
+			cur++;
+		}
+	}
+	if (!bFound) return FALSE;
+	strName = strOut + strExt;
 	return TRUE;
 }
 
