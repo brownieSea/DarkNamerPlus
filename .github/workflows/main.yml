@@ -1,4 +1,4 @@
-name: Build DarkNamer
+name: Build DarkNamerPlus
 
 on:
   push:
@@ -23,11 +23,11 @@ jobs:
           if errorlevel 1 exit /b 1
           cl /nologo /c /EHsc /O2 /MT /W1 /Zc:forScope- /utf-8 /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /D _WIN32_WINNT=0x0601 /D _CRT_SECURE_NO_WARNINGS DarkNamer.cpp DarkNamerDlg.cpp DlgInput.cpp EtcFunctions.cpp StdAfx.cpp FOLDERDIALOG.CPP
           if errorlevel 1 exit /b 1
-          link /nologo /subsystem:windows /entry:wWinMainCRTStartup /out:DarkNamer.exe DarkNamer.obj DarkNamerDlg.obj DlgInput.obj EtcFunctions.obj StdAfx.obj FOLDERDIALOG.obj DarkNamer.res
+          link /nologo /subsystem:windows /entry:wWinMainCRTStartup /out:DarkNamerPlus.exe DarkNamer.obj DarkNamerDlg.obj DlgInput.obj EtcFunctions.obj StdAfx.obj FOLDERDIALOG.obj DarkNamer.res
           if errorlevel 1 exit /b 1
 
       - name: exe 올리기
         uses: actions/upload-artifact@v4
         with:
-          name: DarkNamer
-          path: DarkNamer.exe
+          name: DarkNamerPlus
+          path: DarkNamerPlus.exe
