@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "EtcFunctions.h"
 
 BOOL FlagGET(int& nFlagType, int nField)
@@ -27,7 +27,7 @@ void FlagSET(int& nFlagType, int nField, BOOL bSet)
 }
 
 
-//ÇØ´ç ÆÄÀÏÀÇ ¾ÆÀÌÄÜ Á¤º¸¸¦ °¡Á®¿Â´Ù
+//í•´ë‹¹ íŒŒì¼ì˜ ì•„ì´ì½˜ ì •ë³´ë¥¼ ê°€ì ¸ì˜¨ë‹¤
 int GetFileImageIndex(CString strPath, BOOL bIsDirectory)
 {
 	SHFILEINFO sfi;
@@ -37,7 +37,7 @@ int GetFileImageIndex(CString strPath, BOOL bIsDirectory)
 	return sfi.iIcon;
 }
 
-//µÎ ÆÄÀÏ¸í ºñ±³ÇÏ±â : Locale °í·Á ºñ±³ ±â´É
+//ë‘ íŒŒì¼ëª… ë¹„êµí•˜ê¸° : Locale ê³ ë ¤ ë¹„êµ ê¸°ëŠ¥
 int CompareFileName(TCHAR* name1, TCHAR* name2)
 {
 	int len1=_tcslen(name1);
@@ -48,7 +48,7 @@ int CompareFileName(TCHAR* name1, TCHAR* name2)
 	return 0; //nRet==CSTR_EQUAL
 }
 
-//ÆÄÀÏ³»ÀÇ ÅØ½ºÆ® Ã³¸®¸¦ À§ÇÑ ÇÔ¼öµé
+//íŒŒì¼ë‚´ì˜ í…ìŠ¤íŠ¸ ì²˜ë¦¬ë¥¼ ìœ„í•œ í•¨ìˆ˜ë“¤
 int GetLine(CString& strText, int nPos, CString& strLine, CString strToken)
 {
 	if (strText.IsEmpty()) {strLine.Empty();return -1;}
@@ -106,7 +106,7 @@ BOOL WriteCStringToFile(CString strFile, CString& strContent)
 
 BOOL ReadFileToCString(CString strFile, CString& strData)
 {
-	//Unicode ½Äº°ÇØ¼­ ÀĞ±â
+	//Unicode ì‹ë³„í•´ì„œ ì½ê¸°
 	try
 	{
 		CFile file;

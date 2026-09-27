@@ -1,4 +1,4 @@
-// DarkNamerDlg.cpp : implementation file
+ï»¿// DarkNamerDlg.cpp : implementation file
 //
 
 #include "stdafx.h"
@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 
 typedef vector<CListItem*> CListItemArray;
 typedef vector<CString> CStrArray;
-typedef map<CString, int> CExtMap; //È®ÀåÀÚ¿¡ ÇØ´çÇÏ´Â ÀÌ¹ÌÁö¸ÊÀÇ ¹øÈ£¸¦ ±â¾ï
+typedef map<CString, int> CExtMap; //í™•ì¥ìì— í•´ë‹¹í•˜ëŠ” ì´ë¯¸ì§€ë§µì˜ ë²ˆí˜¸ë¥¼ ê¸°ì–µ
 
 #define COL_OLDNAME 0
 #define COL_NEWNAME 1
@@ -34,15 +34,15 @@ typedef map<CString, int> CExtMap; //È®ÀåÀÚ¿¡ ÇØ´çÇÏ´Â ÀÌ¹ÌÁö¸ÊÀÇ ¹øÈ£¸¦ ±â¾ï
 #define COL_TIMECREATE 6
 #define COL_TOTAL 7
 
-static int nPathAddMethod=-1; //0=Æú´õ³»ÀÇ ÆÄÀÏ , 1=Æú´õ ÀÌ¸§ , -1=ÃÊ±âÈ­ ¾ÈµÊ
+static int nPathAddMethod=-1; //0=í´ë”ë‚´ì˜ íŒŒì¼ , 1=í´ë” ì´ë¦„ , -1=ì´ˆê¸°í™” ì•ˆë¨
 static HIMAGELIST himl_sys;
 static CExtMap mapExt;
 static int nFolderImage=-1;
 
-//SHGetFileInfo¸¦ °è¼Ó ºÎ¸£´Ù ºÎ¸é ¾ÆÀÌÄÜ°ú ¸®¼Ò½º°¡ ±úÁö´Â Çö»ó ¹ß»ı
-//ÀÌ¸¦ ¹æÁöÇÏ±â À§ÇØ Æ¯Á¤ È®ÀåÀÚ¿¡ ÇØ´çÇÏ´Â ¾ÆÀÌÄÜÀº ÇÑ¹ø¸¸ Ã£¾Æº¸µµ·Ï 
-//¸Ê ±¸Á¶·Î ÀúÀåÇÏ°í »õ·Î¿î ¾ÆÀÌÄÜ¿¡ ´ëÇØ¼­¸¸ SHGetFileInfo¸¦ È£Ãâ 
-//½Ã½ºÅÛ ÀÌ¹ÌÁö ¸®½ºÆ®´Â SHGetFileInfoÈ£Ãâ½Ã µ¿ÀûÀ¸·Î ±¸¼ºµÊ¿¡ ÁÖÀÇ
+//SHGetFileInfoë¥¼ ê³„ì† ë¶€ë¥´ë‹¤ ë¶€ë©´ ì•„ì´ì½˜ê³¼ ë¦¬ì†ŒìŠ¤ê°€ ê¹¨ì§€ëŠ” í˜„ìƒ ë°œìƒ
+//ì´ë¥¼ ë°©ì§€í•˜ê¸° ìœ„í•´ íŠ¹ì • í™•ì¥ìì— í•´ë‹¹í•˜ëŠ” ì•„ì´ì½˜ì€ í•œë²ˆë§Œ ì°¾ì•„ë³´ë„ë¡ 
+//ë§µ êµ¬ì¡°ë¡œ ì €ì¥í•˜ê³  ìƒˆë¡œìš´ ì•„ì´ì½˜ì— ëŒ€í•´ì„œë§Œ SHGetFileInfoë¥¼ í˜¸ì¶œ 
+//ì‹œìŠ¤í…œ ì´ë¯¸ì§€ ë¦¬ìŠ¤íŠ¸ëŠ” SHGetFileInfoí˜¸ì¶œì‹œ ë™ì ìœ¼ë¡œ êµ¬ì„±ë¨ì— ì£¼ì˜
 int GetExtIcon(CString strExt, BOOL bIsDirectory)
 {  
 	if (bIsDirectory) 
@@ -74,7 +74,7 @@ CDarkNamerDlg::CDarkNamerDlg(CWnd* pParent /*=NULL*/)
 
 	m_nShowFlag=0;
 
-	//Ã¹¹øÂ° ³í¸®µå¶óÀÌºê¸¦ ±¸ÇÑ´Ù
+	//ì²«ë²ˆì§¸ ë…¼ë¦¬ë“œë¼ì´ë¸Œë¥¼ êµ¬í•œë‹¤
 /*	TCHAR firstDrive[4]; 
 	memset(firstDrive, 0, sizeof(TCHAR)*4);
 	DWORD drive=GetLogicalDrives();
@@ -88,7 +88,7 @@ CDarkNamerDlg::CDarkNamerDlg(CWnd* pParent /*=NULL*/)
 	firstDrive[1]=_T(':');
 	firstDrive[2]=_T('\\');
 	firstDrive[3]=_T('\0');*/
-	//ÇØ´ç °æ·Î¸¦ ÀÌ¿ëÇØ¼­ ½Ã½ºÅÛ ÀÌ¹ÌÁö¸®½ºÆ®¸¦ ±¸ÇÑ´Ù
+	//í•´ë‹¹ ê²½ë¡œë¥¼ ì´ìš©í•´ì„œ ì‹œìŠ¤í…œ ì´ë¯¸ì§€ë¦¬ìŠ¤íŠ¸ë¥¼ êµ¬í•œë‹¤
 }
 
 void CDarkNamerDlg::DoDataExchange(CDataExchange* pDX)
@@ -140,13 +140,23 @@ BOOL CDarkNamerDlg::OnInitDialog()
 	m_tool2.LoadToolBar(IDR_TOOLBAR2);
 
 	m_list.SetExtendedStyle(LVS_EX_FULLROWSELECT);
-	m_list.InsertColumn(COL_OLDNAME,_T("ÇöÀçÀÌ¸§"));
-	m_list.InsertColumn(COL_NEWNAME,_T("¹Ù²ÜÀÌ¸§"));
-	m_list.InsertColumn(COL_ROOTPATH,_T("ÆÄÀÏÀ§Ä¡"));
-	m_list.InsertColumn(COL_FULLPATH,_T("ÀüÃ¼°æ·Î")); 
-	m_list.InsertColumn(COL_FILESIZE,_T("ÆÄÀÏÅ©±â"), LVCFMT_RIGHT); 
-	m_list.InsertColumn(COL_TIMEMODIFY,_T("º¯°æ½Ã°¢")); 
-	m_list.InsertColumn(COL_TIMECREATE,_T("»ı¼º½Ã°¢")); 
+
+	// ëª©ë¡ ê¸€ê¼´: ìœˆë„ìš° ê¸°ë³¸ ê¸€ê¼´ ì‚¬ìš© (í•œê¸€ ìœˆë„ìš°ëŠ” ë§‘ì€ ê³ ë”• 9pt)
+	NONCLIENTMETRICS ncm;
+	ncm.cbSize = sizeof(NONCLIENTMETRICS);
+	if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0))
+	{
+		m_fontList.CreateFontIndirect(&ncm.lfMessageFont);
+		m_list.SetFont(&m_fontList);
+	}
+
+	m_list.InsertColumn(COL_OLDNAME,_T("í˜„ì¬ì´ë¦„"));
+	m_list.InsertColumn(COL_NEWNAME,_T("ë°”ê¿€ì´ë¦„"));
+	m_list.InsertColumn(COL_ROOTPATH,_T("íŒŒì¼ìœ„ì¹˜"));
+	m_list.InsertColumn(COL_FULLPATH,_T("ì „ì²´ê²½ë¡œ")); 
+	m_list.InsertColumn(COL_FILESIZE,_T("íŒŒì¼í¬ê¸°"), LVCFMT_RIGHT); 
+	m_list.InsertColumn(COL_TIMEMODIFY,_T("ë³€ê²½ì‹œê°")); 
+	m_list.InsertColumn(COL_TIMECREATE,_T("ìƒì„±ì‹œê°")); 
 
 	m_list.SetColumnWidth(COL_OLDNAME,150);
 	m_list.SetColumnWidth(COL_NEWNAME,150);
@@ -283,7 +293,7 @@ BOOL CDarkNamerDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 		FlagSET(m_nShowFlag, COL_TIMECREATE, !FlagGET(m_nShowFlag, COL_TIMECREATE));
 		UpdateColumn(COL_TIMECREATE);
 		break;
-	case IDM_VERSION:	AfxMessageBox(_T("DarkNamer 08.02.10 ¹öÀü")); break;
+	case IDM_VERSION:	AfxMessageBox(_T("DarkNamer 08.02.10 ë²„ì „")); break;
 	default:
 		return CDialog::OnCommand(wParam, lParam);
 	}
@@ -294,7 +304,7 @@ BOOL CDarkNamerDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 BOOL CDarkNamerDlg::PreTranslateMessage(MSG* pMsg) 
 {
 	// TODO: Add your specialized code here and/or call the base class
-	//ÁÖ·Î ´ÜÃàÅ°ÀÇ Ã³¸®
+	//ì£¼ë¡œ ë‹¨ì¶•í‚¤ì˜ ì²˜ë¦¬
 	if (pMsg->message==WM_KEYDOWN)
 	{
 		if (pMsg->wParam==VK_DELETE)
@@ -310,7 +320,7 @@ BOOL CDarkNamerDlg::PreTranslateMessage(MSG* pMsg)
 			}
 			return TRUE;
 		}
-		// <>¸¦ ÀÌ¿ëÇØ ¸®½ºÆ®»ó¿¡¼­ ÀÌµ¿ °¡´É
+		// <>ë¥¼ ì´ìš©í•´ ë¦¬ìŠ¤íŠ¸ìƒì—ì„œ ì´ë™ ê°€ëŠ¥
 		if (pMsg->wParam==188)	{ListUp();return TRUE;}
 		if (pMsg->wParam==190)	{ListDown();return TRUE;} 
 	}
@@ -348,11 +358,11 @@ BOOL CDarkNamerDlg::PreTranslateMessage(MSG* pMsg)
 	return CDialog::PreTranslateMessage(pMsg);
 }
 
-//ÀÎÀÚ·Î ¹ŞÀº ÆÄÀÏÀÇ Á¤º¸¸¦ ÀĞ¾î¼­ ¾ÆÀÌÅÛÀ» ÀÎÀÚ·Î ¹ŞÀº ¾î·¹ÀÌ¿¡ Ãß°¡ÇÑ´Ù.
-//ÆÄÀÏÀÎ °æ¿ì´Â ´Ü¼ø Ãß°¡ÇÏ¸é µÇÁö¸¸ µğ·ºÅä¸®ÀÇ °æ¿ì´Â ´Ù¸£°Ô Ã³¸®
+//ì¸ìë¡œ ë°›ì€ íŒŒì¼ì˜ ì •ë³´ë¥¼ ì½ì–´ì„œ ì•„ì´í…œì„ ì¸ìë¡œ ë°›ì€ ì–´ë ˆì´ì— ì¶”ê°€í•œë‹¤.
+//íŒŒì¼ì¸ ê²½ìš°ëŠ” ë‹¨ìˆœ ì¶”ê°€í•˜ë©´ ë˜ì§€ë§Œ ë””ë ‰í† ë¦¬ì˜ ê²½ìš°ëŠ” ë‹¤ë¥´ê²Œ ì²˜ë¦¬
 inline void AddFileItem(CListItemArray* aFile, CListItem* pItem)
 {
-	//Ãß°¡ ¼ÒÆ®°¡ ÇÊ¿ä¾øµµ·Ï ¿ª¼øÀ¸·Î ºñ±³ÇØ¼­ »ğÀÔÇÑ´Ù
+	//ì¶”ê°€ ì†ŒíŠ¸ê°€ í•„ìš”ì—†ë„ë¡ ì—­ìˆœìœ¼ë¡œ ë¹„êµí•´ì„œ ì‚½ì…í•œë‹¤
 	CListItemArray::reverse_iterator it=aFile->rbegin();
 	while (it!=aFile->rend())
 	{
@@ -366,34 +376,34 @@ inline void AddFileItem(CListItemArray* aFile, CListItem* pItem)
 void CDarkNamerDlg::AddFile(void* pArray, CString strFile, BOOL bIsDirectory)
 {
 	CListItemArray* aFile=(CListItemArray*)pArray;
-	if (bIsDirectory) //Æú´õÀÎ °æ¿ìÀÇ Ã³¸® 
+	if (bIsDirectory) //í´ë”ì¸ ê²½ìš°ì˜ ì²˜ë¦¬ 
 	{
-		//Æú´õ Ãß°¡ ¹æ¹ı ¹¯±â
-		if (nPathAddMethod==-1) //¸Ç Ã³À½(-1ÀÏ¶§)¿¡¸¸ ¹°¾îº»´Ù
+		//í´ë” ì¶”ê°€ ë°©ë²• ë¬»ê¸°
+		if (nPathAddMethod==-1) //ë§¨ ì²˜ìŒ(-1ì¼ë•Œ)ì—ë§Œ ë¬¼ì–´ë³¸ë‹¤
 		{
-			if (AfxGetMainWnd()->MessageBox(_T("°æ·Î¸¦ Á÷Á¢ Ãß°¡·Á¸é YES, °æ·Î³» ÆÄÀÏÀ» Ãß°¡ÇÏ·Á¸é NO ¼±ÅÃ."), strFile, MB_YESNO)==IDNO) 
+			if (AfxGetMainWnd()->MessageBox(_T("ê²½ë¡œë¥¼ ì§ì ‘ ì¶”ê°€ë ¤ë©´ YES, ê²½ë¡œë‚´ íŒŒì¼ì„ ì¶”ê°€í•˜ë ¤ë©´ NO ì„ íƒ."), strFile, MB_YESNO)==IDNO) 
 				nPathAddMethod=0;
 			else nPathAddMethod=1;
 		}
 
-		if (nPathAddMethod==0) //Æú´õ ³»ÀÇ ÆÄÀÏµéÀ» Ãß°¡ÇÏ±â·Î ¼±ÅÃÇÑ °æ¿ì 
+		if (nPathAddMethod==0) //í´ë” ë‚´ì˜ íŒŒì¼ë“¤ì„ ì¶”ê°€í•˜ê¸°ë¡œ ì„ íƒí•œ ê²½ìš° 
 		{
 			CFileFind find;
 			if (find.FindFile(strFile+_T("\\*.*"))==FALSE) return;
 			while (TRUE)
 			{
 				BOOL b=find.FindNextFile();
-				//.°ú ..À» Á¦¿Ü 
+				//.ê³¼ ..ì„ ì œì™¸ 
 				CString strName=find.GetFileName();
 				if (strName!=_T(".") && strName!=_T(".."))
 				{
-					if (find.IsDirectory()==TRUE) //Æú´õÀÎ °æ¿ì Àç±ÍÈ£Ãâ
+					if (find.IsDirectory()==TRUE) //í´ë”ì¸ ê²½ìš° ì¬ê·€í˜¸ì¶œ
 					{
 						AddFile(aFile, find.GetFilePath(), find.IsDirectory()); 
 					}
-					else //Æú´õ ³» ÆÄÀÏÀÇ °æ¿ì CFileFind·Î ÀÌ¹Ì ¿ÀÇÂµÇ¾î ÀÖÀ¸¹Ç·Î È°¿ëÇÑ´Ù.
+					else //í´ë” ë‚´ íŒŒì¼ì˜ ê²½ìš° CFileFindë¡œ ì´ë¯¸ ì˜¤í”ˆë˜ì–´ ìˆìœ¼ë¯€ë¡œ í™œìš©í•œë‹¤.
 					{
-						CListItem* pItem=new CListItem; //¾ÆÀÌÅÛ »ı¼º
+						CListItem* pItem=new CListItem; //ì•„ì´í…œ ìƒì„±
 						memset(pItem, 0, sizeof(CListItem));
 						_tcscpy(pItem->strPath, find.GetFilePath());
 						pItem->bIsDirectory=find.IsDirectory();
@@ -406,16 +416,16 @@ void CDarkNamerDlg::AddFile(void* pArray, CString strFile, BOOL bIsDirectory)
 				if (b==FALSE) break;
 			}
 			find.Close();
-			return; //º¹±Í
+			return; //ë³µê·€
 		}
-		//else if (nPathAddMethod==1) {} //Æú´õ ÀÌ¸§À» Á÷Á¢ Ãß°¡ÇÏ±â·Î ¼±ÅÃÇÑ °æ¿ì´Â ´Ü¼ø ÆÄÀÏ°ú µ¿ÀÏÇÏ°Ô Ã³¸®		
+		//else if (nPathAddMethod==1) {} //í´ë” ì´ë¦„ì„ ì§ì ‘ ì¶”ê°€í•˜ê¸°ë¡œ ì„ íƒí•œ ê²½ìš°ëŠ” ë‹¨ìˆœ íŒŒì¼ê³¼ ë™ì¼í•˜ê²Œ ì²˜ë¦¬		
 	} 
 
-	//½ÇÁ¦·Î ÆÄÀÏÀ» Ãß°¡ÇÑ´Ù
-	//À¯´ÏÄÚµå Áö¿øÀ» À§ÇØ¼­´Â CreateFile/OPEN_EXISTING À¸·Î ÆÄÀÏ ÇÚµéÀ» ¿¬´Ù
+	//ì‹¤ì œë¡œ íŒŒì¼ì„ ì¶”ê°€í•œë‹¤
+	//ìœ ë‹ˆì½”ë“œ ì§€ì›ì„ ìœ„í•´ì„œëŠ” CreateFile/OPEN_EXISTING ìœ¼ë¡œ íŒŒì¼ í•¸ë“¤ì„ ì—°ë‹¤
 	HANDLE hfile=(HANDLE)CreateFile((LPCTSTR)strFile,0,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_FLAG_BACKUP_SEMANTICS,NULL);
 	if (hfile==INVALID_HANDLE_VALUE) return;
-	CListItem* pItem=new CListItem; //¾ÆÀÌÅÛ »ı¼º
+	CListItem* pItem=new CListItem; //ì•„ì´í…œ ìƒì„±
 	memset(pItem, 0, sizeof(CListItem));
 	_tcscpy(pItem->strPath, strFile);
 	pItem->bIsDirectory=bIsDirectory;
@@ -425,7 +435,7 @@ void CDarkNamerDlg::AddFile(void* pArray, CString strFile, BOOL bIsDirectory)
 	AddFileItem(aFile, pItem);
 }
 
-// Drag & Drop À» »ç¿ëÇØ¼­ ÆÄÀÏÀ» ¸ñ·Ï¿¡ Ãß°¡ÇÑ´Ù 
+// Drag & Drop ì„ ì‚¬ìš©í•´ì„œ íŒŒì¼ì„ ëª©ë¡ì— ì¶”ê°€í•œë‹¤ 
 void CDarkNamerDlg::OnDropFiles(HDROP hDropInfo) 
 {
     WORD cFiles;
@@ -434,17 +444,17 @@ void CDarkNamerDlg::OnDropFiles(HDROP hDropInfo)
 	CString strFile, strPath, strName, strTemp;
     cFiles = DragQueryFile(hDropInfo, (UINT)-1, NULL, 0);
 
-	CListItemArray aFile; //»ı¼ºµÈ CListItemÀ» ÀúÀå
+	CListItemArray aFile; //ìƒì„±ëœ CListItemì„ ì €ì¥
 
 	int i;
-	nPathAddMethod=-1; //Æú´õÀÇ Ã³¸® ¹æ¹ı °áÁ¤ º¯¼ö
-	SetDlgItemText(IDC_ST_BAR, _T("Ã³¸®Áß..."));
+	nPathAddMethod=-1; //í´ë”ì˜ ì²˜ë¦¬ ë°©ë²• ê²°ì • ë³€ìˆ˜
+	SetDlgItemText(IDC_ST_BAR, _T("ì²˜ë¦¬ì¤‘..."));
 	for (i=0; i<cFiles; i++)
 	{
 		DragQueryFile(hDropInfo, i, szFileName, sizeof(szFileName));
 
 		strFile = (LPCTSTR)szFileName;
-		//ÇöÀç ¸®½ºÆ® Áß¿¡ °°Àº ÀÌ¸§ÀÌ ÀÖ´ÂÁö È®ÀÎÇÑ´Ù
+		//í˜„ì¬ ë¦¬ìŠ¤íŠ¸ ì¤‘ì— ê°™ì€ ì´ë¦„ì´ ìˆëŠ”ì§€ í™•ì¸í•œë‹¤
 		BOOL b=TRUE;
 		for (int j=0; j<m_list.GetItemCount(); j++)
 		{
@@ -454,7 +464,7 @@ void CDarkNamerDlg::OnDropFiles(HDROP hDropInfo)
 				break;
 			}
 		}
-		//°°Àº ÀÌ¸§ÀÌ ¾ø´Â °æ¿ì Á¸Àç¿©ºÎ È®ÀÎ °â µğ·ºÅä¸® ¿©ºÎ ÆÇÁ¤
+		//ê°™ì€ ì´ë¦„ì´ ì—†ëŠ” ê²½ìš° ì¡´ì¬ì—¬ë¶€ í™•ì¸ ê²¸ ë””ë ‰í† ë¦¬ ì—¬ë¶€ íŒì •
 		if (b==TRUE) 
 		{
 			DWORD dwAttribute=GetFileAttributes(strFile);
@@ -468,7 +478,7 @@ void CDarkNamerDlg::OnDropFiles(HDROP hDropInfo)
     DragFinish(hDropInfo);	
 	SetDlgItemText(IDC_ST_BAR, _T(""));
 	
-	//¸®½ºÆ®¿¡ ÆÄÀÏÀ» Ãß°¡ÇÑ´Ù
+	//ë¦¬ìŠ¤íŠ¸ì— íŒŒì¼ì„ ì¶”ê°€í•œë‹¤
 	m_list.SetRedraw(FALSE);
 	CListItemArray::iterator it=aFile.begin();
 	while (it!=aFile.end())	{FileListAdd(*(it)); it++;};
@@ -477,7 +487,7 @@ void CDarkNamerDlg::OnDropFiles(HDROP hDropInfo)
 	UpdateMenu();
 }
 
-//ÆÄÀÏ ¿­±â ½Ã½ºÅÛ ´ÙÀÌ¾ó·Î±×¸¦ »ç¿ëÇØ¼­ ÆÄÀÏÀ» ¸ñ·Ï¿¡ Ãß°¡ÇÑ´Ù
+//íŒŒì¼ ì—´ê¸° ì‹œìŠ¤í…œ ë‹¤ì´ì–¼ë¡œê·¸ë¥¼ ì‚¬ìš©í•´ì„œ íŒŒì¼ì„ ëª©ë¡ì— ì¶”ê°€í•œë‹¤
 void CDarkNamerDlg::AddByFileDialog()
 {
 	CFileDialog dlg(TRUE, _T("*.*"), NULL, 
@@ -485,22 +495,22 @@ void CDarkNamerDlg::AddByFileDialog()
 
 	TCHAR *buf = new TCHAR[65536];           
 	memset(buf, 0, sizeof(buf));
-	dlg.m_ofn.lpstrTitle=_T("ÀÌ¸§ ºÙÀÏ ÆÄÀÏ ºÒ·¯¿À±â");
+	dlg.m_ofn.lpstrTitle=_T("ì´ë¦„ ë¶™ì¼ íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸°");
 	dlg.m_ofn.lpstrFile = buf;    
 	dlg.m_ofn.nMaxFile = 65536;  
 
 	if (dlg.DoModal()==IDOK)
 	{
-		CListItemArray aFile; //»ı¼ºµÈ CListItemÀ» ÀúÀå
-		nPathAddMethod=-1; //Æú´õÀÇ Ã³¸® ¹æ¹ı °áÁ¤ º¯¼ö
+		CListItemArray aFile; //ìƒì„±ëœ CListItemì„ ì €ì¥
+		nPathAddMethod=-1; //í´ë”ì˜ ì²˜ë¦¬ ë°©ë²• ê²°ì • ë³€ìˆ˜
 
-		SetDlgItemText(IDC_ST_BAR, _T("Ã³¸®Áß..."));
+		SetDlgItemText(IDC_ST_BAR, _T("ì²˜ë¦¬ì¤‘..."));
 		CString strFile;
 		POSITION pos=dlg.GetStartPosition();
 		while(pos)
 		{
 			strFile = dlg.GetNextPathName(pos);
-			//ÇöÀç ¸®½ºÆ® Áß¿¡ °°Àº ÀÌ¸§ÀÌ ÀÖ´ÂÁö È®ÀÎÇÑ´Ù
+			//í˜„ì¬ ë¦¬ìŠ¤íŠ¸ ì¤‘ì— ê°™ì€ ì´ë¦„ì´ ìˆëŠ”ì§€ í™•ì¸í•œë‹¤
 			BOOL b=TRUE;
 			for (int j=0; j<m_list.GetItemCount(); j++)
 			{
@@ -510,7 +520,7 @@ void CDarkNamerDlg::AddByFileDialog()
 					break;
 				}
 			}
-			//°°Àº ÀÌ¸§ÀÌ ¾ø´Â °æ¿ì Á¸Àç¿©ºÎ È®ÀÎ °â µğ·ºÅä¸® ¿©ºÎ ÆÇÁ¤
+			//ê°™ì€ ì´ë¦„ì´ ì—†ëŠ” ê²½ìš° ì¡´ì¬ì—¬ë¶€ í™•ì¸ ê²¸ ë””ë ‰í† ë¦¬ ì—¬ë¶€ íŒì •
 			if (b==TRUE) 
 			{
 				DWORD dwAttribute=GetFileAttributes(strFile);
@@ -522,7 +532,7 @@ void CDarkNamerDlg::AddByFileDialog()
 			}
 		}
 		SetDlgItemText(IDC_ST_BAR, _T(""));
-		//¸®½ºÆ®¿¡ ÆÄÀÏÀ» Ãß°¡ÇÑ´Ù
+		//ë¦¬ìŠ¤íŠ¸ì— íŒŒì¼ì„ ì¶”ê°€í•œë‹¤
 		m_list.SetRedraw(FALSE);
 		CListItemArray::iterator it=aFile.begin();
 		while (it!=aFile.end())	{FileListAdd(*(it)); it++;};
@@ -531,7 +541,7 @@ void CDarkNamerDlg::AddByFileDialog()
 	delete[] buf;
 }
 
-//ÆÄÀÏÀ» ¸®½ºÆ®ÄÁÆ®·Ñ¿¡ Ç¥½ÃÇÏ°í ¿¬°á½ÃÅ²´Ù
+//íŒŒì¼ì„ ë¦¬ìŠ¤íŠ¸ì»¨íŠ¸ë¡¤ì— í‘œì‹œí•˜ê³  ì—°ê²°ì‹œí‚¨ë‹¤
 int CDarkNamerDlg::FileListAdd(CListItem* pItem)
 {
 	CString strPath = Get_Path(pItem->strPath);
@@ -540,25 +550,25 @@ int CDarkNamerDlg::FileListAdd(CListItem* pItem)
 
 	int nItem;
 	nItem=m_list.InsertItem(m_list.GetItemCount(), strName, GetExtIcon(strExt, pItem->bIsDirectory));
-	//ÇÊ¿äÇÑ Á¤º¸°¡ ´Ù µé¾îÀÖ´Â °´Ã¼ Æ÷ÀÎÅÍ¸¦ ¾ÆÀÌÅÛ µ¥ÀÌÅÍ·Î
+	//í•„ìš”í•œ ì •ë³´ê°€ ë‹¤ ë“¤ì–´ìˆëŠ” ê°ì²´ í¬ì¸í„°ë¥¼ ì•„ì´í…œ ë°ì´í„°ë¡œ
 	m_list.SetItemData(nItem, (DWORD)pItem);
 
-	//±âº»ÀûÀ¸·Î Ç¥½ÃµÇ¾î¾ß ÇÏ´Â Á¤º¸ : ¿ø·¡ ÀÌ¸§(Insert½Ã)°ú ¹Ù²ğ ÀÌ¸§, Á¸ÀçÇÏ´Â °æ·Î
+	//ê¸°ë³¸ì ìœ¼ë¡œ í‘œì‹œë˜ì–´ì•¼ í•˜ëŠ” ì •ë³´ : ì›ë˜ ì´ë¦„(Insertì‹œ)ê³¼ ë°”ë€” ì´ë¦„, ì¡´ì¬í•˜ëŠ” ê²½ë¡œ
 	m_list.SetItemText(nItem, COL_NEWNAME, strName);
 	m_list.SetItemText(nItem, COL_ROOTPATH, strPath);
 
-	//¼±ÅÃÀûÀ¸·Î Ç¥½ÃÇÒ Á¤º¸
+	//ì„ íƒì ìœ¼ë¡œ í‘œì‹œí•  ì •ë³´
 	CString strTemp;
 
 	if (FlagGET(m_nShowFlag,COL_FULLPATH)) 
 	{
-		//ÀüÃ¼ °æ·Î 
+		//ì „ì²´ ê²½ë¡œ 
 		m_list.SetItemText(nItem, COL_FULLPATH, pItem->strPath);
 	}
 	
 	if (FlagGET(m_nShowFlag,COL_FILESIZE))
 	{
-		//ÆÄÀÏ Å©±â 
+		//íŒŒì¼ í¬ê¸° 
 		strTemp.Format(_T("%d"), pItem->dwSize);
 		m_list.SetItemText(nItem, COL_FILESIZE, strTemp);
 	}
@@ -567,7 +577,7 @@ int CDarkNamerDlg::FileListAdd(CListItem* pItem)
 
 	if (FlagGET(m_nShowFlag,COL_TIMEMODIFY))
 	{
-		//¼öÁ¤µÈ ½Ã°¢
+		//ìˆ˜ì •ëœ ì‹œê°
 		FileTimeToSystemTime(&(pItem->timeModified), &systime);
 		strTemp.Format(_T("%d-%02d-%02d %02d:%02d:%02d"), systime.wYear,  
 			systime.wMonth,  systime.wDay,  systime.wHour, systime.wMinute, systime.wSecond);
@@ -576,7 +586,7 @@ int CDarkNamerDlg::FileListAdd(CListItem* pItem)
 
 	if (FlagGET(m_nShowFlag,COL_TIMECREATE))
 	{
-		//»ı¼ºµÈ ½Ã°¢
+		//ìƒì„±ëœ ì‹œê°
 		FileTimeToSystemTime(&(pItem->timeCreated), &systime);
 		strTemp.Format(_T("%d-%02d-%02d %02d:%02d:%02d"), systime.wYear,  
 			systime.wMonth,  systime.wDay,  systime.wHour, systime.wMinute, systime.wSecond);
@@ -588,10 +598,10 @@ int CDarkNamerDlg::FileListAdd(CListItem* pItem)
 }
 
 
-//¸®½ºÆ® ¸ğµÎ »èÁ¦
+//ë¦¬ìŠ¤íŠ¸ ëª¨ë‘ ì‚­ì œ
 void CDarkNamerDlg::ClearList()
 {
-	//¸®½ºÆ®¿¡ ¿¬°áµÈ ¾ÆÀÌÅÛµéÀº new·Î »ı¼ºµÈ °ÍÀÌ¹Ç·Î ¸ğµÎ delete ÇÑ´Ù
+	//ë¦¬ìŠ¤íŠ¸ì— ì—°ê²°ëœ ì•„ì´í…œë“¤ì€ newë¡œ ìƒì„±ëœ ê²ƒì´ë¯€ë¡œ ëª¨ë‘ delete í•œë‹¤
 	for (int i=0; i<m_list.GetItemCount(); i++)
 	{
 		CListItem* pItem=(CListItem*)m_list.GetItemData(i);
@@ -601,7 +611,7 @@ void CDarkNamerDlg::ClearList()
 	UpdateCount(m_list.GetItemCount());
 }
 
-//¹Ù²ğ ÀÌ¸§À» ¿ø·¡ ÀÌ¸§À¸·Î ´Ù½Ã º¹±¸
+//ë°”ë€” ì´ë¦„ì„ ì›ë˜ ì´ë¦„ìœ¼ë¡œ ë‹¤ì‹œ ë³µêµ¬
 void CDarkNamerDlg::InitList()
 {	
 	m_list.SetRedraw(FALSE);
@@ -619,7 +629,7 @@ void CDarkNamerDlg::ManualChange()
 
 	CDlgInput dlg;
 	dlg.InitValue(m_list.GetItemText(n,COL_NEWNAME), _T(""));
-	dlg.InitInputDlg(m_list.GetItemText(n,COL_NEWNAME)+_T(" ¸¦"), _T("À¸·Î"), _T(""));
+	dlg.InitInputDlg(m_list.GetItemText(n,COL_NEWNAME)+_T(" ë¥¼"), _T("ìœ¼ë¡œ"), _T(""));
 	if (dlg.DoModal()==IDOK)
 	{
 		m_list.SetItemText(n, COL_NEWNAME, dlg.m_strReturn1);
@@ -629,7 +639,7 @@ void CDarkNamerDlg::ManualChange()
 void CDarkNamerDlg::NameReplace()
 {
 	CDlgInput dlg;
-	dlg.InitInputDlg(_T("ÀÌ¸§¿¡ µé¾îÀÖ´Â ¹®ÀÚ¿­À» ¹Ù²ß´Ï´Ù."), _T("¸¦"), _T("À¸·Î"));
+	dlg.InitInputDlg(_T("ì´ë¦„ì— ë“¤ì–´ìˆëŠ” ë¬¸ìì—´ì„ ë°”ê¿‰ë‹ˆë‹¤."), _T("ë¥¼"), _T("ìœ¼ë¡œ"));
 
 	if (dlg.DoModal()==IDCANCEL) return;
 	CString strTemp;
@@ -646,7 +656,7 @@ void CDarkNamerDlg::NameReplace()
 void CDarkNamerDlg::NameAddFront()
 {
 	CDlgInput dlg;
-	dlg.InitInputDlg(_T("ÀÌ¸§ÀÇ ¾Õ¿¡ ÁöÁ¤ÇÑ ¹®ÀÚ¿­À» ºÙ¿©Áİ´Ï´Ù."), _T("ºÙÀÏ ¹®ÀÚ¿­"), _T(""));
+	dlg.InitInputDlg(_T("ì´ë¦„ì˜ ì•ì— ì§€ì •í•œ ë¬¸ìì—´ì„ ë¶™ì—¬ì¤ë‹ˆë‹¤."), _T("ë¶™ì¼ ë¬¸ìì—´"), _T(""));
 
 	if (dlg.DoModal()==IDCANCEL) return;
 	CString strTemp;
@@ -659,7 +669,7 @@ void CDarkNamerDlg::NameAddFront()
 	m_list.SetRedraw(TRUE);
 }
 
-//inline ÇÔ¼ö. ÀÌ¸§ ¸Ç µÚ, È®ÀåÀÚ ¹Ù·Î ¾Õ¿¡ Æ¯Á¤ ¹®ÀÚ¿­À» »ğÀÔÇØÁÖ´Â ±â´É
+//inline í•¨ìˆ˜. ì´ë¦„ ë§¨ ë’¤, í™•ì¥ì ë°”ë¡œ ì•ì— íŠ¹ì • ë¬¸ìì—´ì„ ì‚½ì…í•´ì£¼ëŠ” ê¸°ëŠ¥
 void CDarkNamerDlg::NameAppend(int nItem, CString strAppend)
 {
 	CListItem* pItem=(CListItem*)m_list.GetItemData(nItem);
@@ -672,7 +682,7 @@ void CDarkNamerDlg::NameAppend(int nItem, CString strAppend)
 void CDarkNamerDlg::NameAddRear()
 {
 	CDlgInput dlg;
-	dlg.InitInputDlg(_T("ÀÌ¸§ÀÇ µÚ¿¡ ÁöÁ¤ÇÑ ¹®ÀÚ¿­À» ºÙ¿©Áİ´Ï´Ù."), _T("ºÙÀÏ ¹®ÀÚ¿­"), _T(""));
+	dlg.InitInputDlg(_T("ì´ë¦„ì˜ ë’¤ì— ì§€ì •í•œ ë¬¸ìì—´ì„ ë¶™ì—¬ì¤ë‹ˆë‹¤."), _T("ë¶™ì¼ ë¬¸ìì—´"), _T(""));
 
 	if (dlg.DoModal()==IDCANCEL) return;
 	CString strName, strExt;
@@ -686,13 +696,13 @@ void CDarkNamerDlg::NameAddRear()
 }
 void CDarkNamerDlg::NameAddPath()
 {
-	//ÀÌ¸§¾Õ¿¡ ¹Ù·Î »óÀ§ Æú´õ¸í ºÙÀÌ±â
+	//ì´ë¦„ì•ì— ë°”ë¡œ ìƒìœ„ í´ë”ëª… ë¶™ì´ê¸°
 	m_list.SetRedraw(FALSE);
 	for (int i=0; i<m_list.GetItemCount(); i++)
 	{
 		CString strPath = m_list.GetItemText(i, COL_ROOTPATH);
 		CString strTemp = strPath.Right(strPath.GetLength()-strPath.ReverseFind(_T('\\'))-1);
-		if (strPath!=strTemp) //°°À»¶§´Â c:, d: °°Àº µå¶óÀÌºê ¸íÀÏ¶§.
+		if (strPath!=strTemp) //ê°™ì„ë•ŒëŠ” c:, d: ê°™ì€ ë“œë¼ì´ë¸Œ ëª…ì¼ë•Œ.
 		{
 			strTemp+=_T("_")+m_list.GetItemText(i, COL_NEWNAME);
 			m_list.SetItemText(i, COL_NEWNAME, strTemp);
@@ -703,12 +713,12 @@ void CDarkNamerDlg::NameAddPath()
 
 void CDarkNamerDlg::NameAddPathBack()
 {
-	//ÀÌ¸§µÚ¿¡ ¹Ù·Î »óÀ§ Æú´õ¸í ºÙÀÌ±â
+	//ì´ë¦„ë’¤ì— ë°”ë¡œ ìƒìœ„ í´ë”ëª… ë¶™ì´ê¸°
 	for (int i=0; i<m_list.GetItemCount(); i++)
 	{
 		CString strPath = m_list.GetItemText(i, COL_ROOTPATH);
-		CString strTemp = strPath.Right(strPath.GetLength()-strPath.ReverseFind(_T('\\'))-1); //°æ·Î ¸ÇµÚ ÀÚ¸£±â
-		if (strPath!=strTemp) //°°À»¶§´Â c:, d: °°Àº µå¶óÀÌºê ¸íÀÏ¶§.
+		CString strTemp = strPath.Right(strPath.GetLength()-strPath.ReverseFind(_T('\\'))-1); //ê²½ë¡œ ë§¨ë’¤ ìë¥´ê¸°
+		if (strPath!=strTemp) //ê°™ì„ë•ŒëŠ” c:, d: ê°™ì€ ë“œë¼ì´ë¸Œ ëª…ì¼ë•Œ.
 		{
 			NameAppend(i, _T("_")+strTemp);
 		}
@@ -718,7 +728,7 @@ void CDarkNamerDlg::NameAddPathBack()
 
 void CDarkNamerDlg::NameNumberOnly()
 {
-	//ÀÌ¸§¿¡¼­ ¼ıÀÚ¸¸ ³²±â±â
+	//ì´ë¦„ì—ì„œ ìˆ«ìë§Œ ë‚¨ê¸°ê¸°
 	CString strName, strExt;
 	m_list.SetRedraw(FALSE);
 	for (int i=0; i<m_list.GetItemCount(); i++)
@@ -741,15 +751,15 @@ void CDarkNamerDlg::NameNumberOnly()
 void CDarkNamerDlg::NameDigit()
 {
 	CDlgInput dlg;
-	dlg.InitInputDlg(_T("¼ıÀÚºÎºĞÀÇ ÀÚ¸®¼ö¸¦ ¸ÂÃç 0À» ºÙÀÔ´Ï´Ù."), _T("ÀÚ¸®¼ö"), _T(""));
-	dlg.m_aCombo.Add(_T("Á¦ÀÏ µŞ¹øÈ£ ¸ÂÃã"));
-	dlg.m_aCombo.Add(_T("Á¦ÀÏ ¾Õ¹øÈ£ ¸ÂÃã"));
+	dlg.InitInputDlg(_T("ìˆ«ìë¶€ë¶„ì˜ ìë¦¬ìˆ˜ë¥¼ ë§ì¶° 0ì„ ë¶™ì…ë‹ˆë‹¤."), _T("ìë¦¬ìˆ˜"), _T(""));
+	dlg.m_aCombo.Add(_T("ì œì¼ ë’·ë²ˆí˜¸ ë§ì¶¤"));
+	dlg.m_aCombo.Add(_T("ì œì¼ ì•ë²ˆí˜¸ ë§ì¶¤"));
 
 	if (dlg.DoModal()==IDCANCEL) return;
 	int nDigit=_ttoi(dlg.m_strReturn1);
 	if (nDigit<=0) 
 	{
-		AfxMessageBox(_T("ÀÚ¸®¼ö ÀÔ·ÂÀÌ Àß¸øµÇ¾ú½À´Ï´Ù."));
+		AfxMessageBox(_T("ìë¦¬ìˆ˜ ì…ë ¥ì´ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤."));
 		return;
 	}
 	CString strName,strExt;
@@ -766,7 +776,7 @@ void CDarkNamerDlg::NameDigit()
 		nStatus=0;
 		nStart=-1;
 		nEnd=-1;
-		if (dlg.m_nCB==0) //µŞ¹øÈ£
+		if (dlg.m_nCB==0) //ë’·ë²ˆí˜¸
 		{
 			for (int j=strName.GetLength()-1; j>=0; j--)
 			{
@@ -783,7 +793,7 @@ void CDarkNamerDlg::NameDigit()
 				}
 			}
 		}
-		else //if (dlg.m_nCB==1) //¾Õ¹øÈ£
+		else //if (dlg.m_nCB==1) //ì•ë²ˆí˜¸
 		{
 			for (int j=0; j<=strName.GetLength()-1; j++)
 			{
@@ -813,7 +823,7 @@ void CDarkNamerDlg::NameDigit()
 	m_list.SetRedraw(TRUE);
 }
 
-void CDarkNamerDlg::ExtDel() //È®ÀåÀÚ »èÁ¦
+void CDarkNamerDlg::ExtDel() //í™•ì¥ì ì‚­ì œ
 {
 	CString strTemp;
 	m_list.SetRedraw(FALSE);
@@ -828,7 +838,7 @@ void CDarkNamerDlg::ExtDel() //È®ÀåÀÚ »èÁ¦
 void CDarkNamerDlg::ExtAdd()
 {
 	CDlgInput dlg;
-	dlg.InitInputDlg(_T("È®ÀåÀÚ¸¦ µÚ¿¡ ºÙÀÔ´Ï´Ù."), _T("ºÙÀÏ È®ÀåÀÚ"), _T(""));
+	dlg.InitInputDlg(_T("í™•ì¥ìë¥¼ ë’¤ì— ë¶™ì…ë‹ˆë‹¤."), _T("ë¶™ì¼ í™•ì¥ì"), _T(""));
 	if (dlg.DoModal()==IDCANCEL) return;
 	CString strTemp;
 	CString strExt=dlg.m_strReturn1;
@@ -847,7 +857,7 @@ void CDarkNamerDlg::ExtAdd()
 void CDarkNamerDlg::ExtReplace()
 {
 	CDlgInput dlg;
-	dlg.InitInputDlg(_T("È®ÀåÀÚ¸¦ ¹Ù²ã Áİ´Ï´Ù."), _T("¹Ù²Ü È®ÀåÀÚ"),_T(""));
+	dlg.InitInputDlg(_T("í™•ì¥ìë¥¼ ë°”ê¿” ì¤ë‹ˆë‹¤."), _T("ë°”ê¿€ í™•ì¥ì"),_T(""));
 
 	if (dlg.DoModal()==IDCANCEL) return;
 	CString strTemp;
@@ -894,10 +904,10 @@ CString CDarkNamerDlg::Get_Ext(CString strFile, BOOL bIsDirectory)
 	return strReturn;
 }
 
-//½ÇÁ¦ ÆÄÀÏ ½Ã½ºÅÛ»óÀÇ Á¤º¸¸¦ ¹Ù²ã ÆÄÀÏ ÀÌ¸§ º¯°æÇÏ±â
+//ì‹¤ì œ íŒŒì¼ ì‹œìŠ¤í…œìƒì˜ ì •ë³´ë¥¼ ë°”ê¿” íŒŒì¼ ì´ë¦„ ë³€ê²½í•˜ê¸°
 void CDarkNamerDlg::ApplyChange()
 {
-	if (AfxMessageBox(_T("½ÇÁ¦ ÆÄÀÏ ÀÌ¸§À» º¯°æÇÏ½Ã°Ú½À´Ï±î?"), MB_OKCANCEL)==IDCANCEL) return;
+	if (AfxMessageBox(_T("ì‹¤ì œ íŒŒì¼ ì´ë¦„ì„ ë³€ê²½í•˜ì‹œê² ìŠµë‹ˆê¹Œ?"), MB_OKCANCEL)==IDCANCEL) return;
 	CString strNewPath, strTemp,strLog;
 	int i;
 	CStrArray aAfter;
@@ -914,7 +924,7 @@ void CDarkNamerDlg::ApplyChange()
 		strTemp=m_list.GetItemText(i,COL_NEWNAME);
 		if (strTemp.IsEmpty()==TRUE) 
 		{
-			AfxMessageBox(_T("ÀÌ¸§ÀÌ ÁöÁ¤µÇÁö ¾ÊÀº °æ¿ì°¡ ÀÖ½À´Ï´Ù."));
+			AfxMessageBox(_T("ì´ë¦„ì´ ì§€ì •ë˜ì§€ ì•Šì€ ê²½ìš°ê°€ ìˆìŠµë‹ˆë‹¤."));
 			m_list.SetFocus();
 			m_list.SetItemState(i,LVIS_SELECTED|LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED);
 			m_list.EnsureVisible(i, FALSE);
@@ -922,14 +932,14 @@ void CDarkNamerDlg::ApplyChange()
 		}
 
 		strNewPath=m_list.GetItemText(i,COL_ROOTPATH)+_T("\\")+strTemp;
-		//Áßº¹µÇ´Â ÀÌ¸§ÀÌ ÀÖ´ÂÁö °Ë»çÇÑ´Ù
+		//ì¤‘ë³µë˜ëŠ” ì´ë¦„ì´ ìˆëŠ”ì§€ ê²€ì‚¬í•œë‹¤
 		CStrArray::iterator it=aAfter.begin();
 		int j=0;
 		while (it!=aAfter.end())
 		{
 			if (strNewPath.CompareNoCase(*(it))==0) 
 			{
-				strTemp.Format(_T("Áßº¹µÇ´Â ÀÌ¸§ÀÌ ÀÖ½À´Ï´Ù.\n%s"), strNewPath);
+				strTemp.Format(_T("ì¤‘ë³µë˜ëŠ” ì´ë¦„ì´ ìˆìŠµë‹ˆë‹¤.\n%s"), strNewPath);
 				AfxMessageBox(strTemp);
 				m_list.SetFocus();
 				m_list.SetItemState(i,LVIS_SELECTED|LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED);
@@ -942,9 +952,9 @@ void CDarkNamerDlg::ApplyChange()
 		}
 		aAfter.push_back(strNewPath);
 	}
-	if (aAfter.size()!=nCount) {AfxMessageBox(_T("Á¤Ã¼ºÒ¸íÀÇ ³»ºÎ ¿À·ù ¹ß»ı."));return;}
+	if (aAfter.size()!=nCount) {AfxMessageBox(_T("ì •ì²´ë¶ˆëª…ì˜ ë‚´ë¶€ ì˜¤ë¥˜ ë°œìƒ."));return;}
 	
-	//½ÇÁ¦ ÆÄÀÏÀÌ¸§À» ¹Ù²Ù´Â °÷
+	//ì‹¤ì œ íŒŒì¼ì´ë¦„ì„ ë°”ê¾¸ëŠ” ê³³
 	m_list.SetRedraw(FALSE);
 	for (i=0; i<nCount; i++)
 	{
@@ -955,12 +965,12 @@ void CDarkNamerDlg::ApplyChange()
 			{
 				if (MoveFile(pItem->strPath, aAfter[i])==FALSE) 
 				{
-					strTemp.Format(_T("%s -> %s º¯°æ ½ÇÆĞ.\n"), pItem->strPath, aAfter[i]);
+					strTemp.Format(_T("%s -> %s ë³€ê²½ ì‹¤íŒ¨.\n"), pItem->strPath, aAfter[i]);
 					strLog+=strTemp;
 				}
 				else
 				{
-					//º¯°æÀÌ ¼º°øÇÑ °æ¿ì ¸®½ºÆ®¿¡ Ç¥½ÃÇÏ±â 
+					//ë³€ê²½ì´ ì„±ê³µí•œ ê²½ìš° ë¦¬ìŠ¤íŠ¸ì— í‘œì‹œí•˜ê¸° 
 					_tcscpy(pItem->strPath, aAfter[i]);
 					CString strPath = Get_Path(pItem->strPath);
 					CString strName = Get_Name(pItem->strPath, TRUE);
@@ -976,28 +986,28 @@ void CDarkNamerDlg::ApplyChange()
 		{
 			e->ReportError();
 			e->Delete();
-			strTemp.Format(_T("%s¸¦ %s·Î ¹Ù²Ù´Âµ¥ ½ÇÆĞ.\n"), pItem->strPath, aAfter[i]);
+			strTemp.Format(_T("%së¥¼ %së¡œ ë°”ê¾¸ëŠ”ë° ì‹¤íŒ¨.\n"), pItem->strPath, aAfter[i]);
 			strLog+=strTemp;
 		}
 	}
 	m_list.SetRedraw(TRUE);
 	if (strLog.IsEmpty()==FALSE) AfxMessageBox(strLog);
-	else						 AfxMessageBox(_T("ÆÄÀÏ ÀÌ¸§À» º¯°æÇÏ¿´½À´Ï´Ù."));
+	else						 AfxMessageBox(_T("íŒŒì¼ ì´ë¦„ì„ ë³€ê²½í•˜ì˜€ìŠµë‹ˆë‹¤."));
 }	
 
-//µÎ°³ÀÇ ¾ÆÀÌÅÛ ±³È¯
+//ë‘ê°œì˜ ì•„ì´í…œ êµí™˜
 void CDarkNamerDlg::SwapItem(int n1, int n2)
 {
 	CString str1, str2;
 	int nCol=COL_TOTAL, i=0;
 
-	//¾ÆÀÌÅÛ µ¥ÀÌÅ¸ ±³È¯
+	//ì•„ì´í…œ ë°ì´íƒ€ êµí™˜
 	DWORD dw1=m_list.GetItemData(n1);
 	DWORD dw2=m_list.GetItemData(n2);
 	m_list.SetItemData(n1, dw2);
 	m_list.SetItemData(n2, dw1);
 
-	//¾ÆÀÌÄÜ ÀÌ¹ÌÁö ±³È¯
+	//ì•„ì´ì½˜ ì´ë¯¸ì§€ êµí™˜
 	LVITEM li;
 	memset(&li, 0, sizeof(LVITEM));
 	li.mask=LVIF_IMAGE;
@@ -1011,7 +1021,7 @@ void CDarkNamerDlg::SwapItem(int n1, int n2)
 	m_list.SetItem(n1, 0, LVIF_IMAGE ,NULL, img2, 0, 0, 0);
 	m_list.SetItem(n2, 0, LVIF_IMAGE ,NULL, img1, 0, 0, 0);
 
-	//Ä®·³ Á¤º¸ ±³È¯ 
+	//ì¹¼ëŸ¼ ì •ë³´ êµí™˜ 
 	for (i=0; i<nCol; i++) 
 	{
 		str1=m_list.GetItemText(n1,i);
@@ -1020,7 +1030,7 @@ void CDarkNamerDlg::SwapItem(int n1, int n2)
 		m_list.SetItemText(n2, i, str1);
 	}
 
-	//¾ÆÀÌÅÛ »óÅÂ ±³È¯
+	//ì•„ì´í…œ ìƒíƒœ êµí™˜
 	DWORD d1=m_list.GetItemState(n1, LVIS_SELECTED|LVIS_FOCUSED);
 	DWORD d2=m_list.GetItemState(n2, LVIS_SELECTED|LVIS_FOCUSED);
 	m_list.SetItemState(n1,d2, LVIS_SELECTED|LVIS_FOCUSED);
@@ -1029,7 +1039,7 @@ void CDarkNamerDlg::SwapItem(int n1, int n2)
 	m_list.EnsureVisible(n2, FALSE);
 }
 
-//¼±ÅÃµÈ ¸®½ºÆ® ¾ÆÀÌÅÛÀ» ÇÑÄ­ À§·Î ¿Ã¸°´Ù 
+//ì„ íƒëœ ë¦¬ìŠ¤íŠ¸ ì•„ì´í…œì„ í•œì¹¸ ìœ„ë¡œ ì˜¬ë¦°ë‹¤ 
 void CDarkNamerDlg::ListUp()
 {
 	m_list.SetRedraw(FALSE);
@@ -1050,7 +1060,7 @@ void CDarkNamerDlg::ListUp()
 
 }
 
-//¼±ÅÃµÈ ¸®½ºÆ® ¾ÆÀÌÅÛÀ» ÇÑÄ­ ¾Æ·¡·Î ³»¸°´Ù 
+//ì„ íƒëœ ë¦¬ìŠ¤íŠ¸ ì•„ì´í…œì„ í•œì¹¸ ì•„ë˜ë¡œ ë‚´ë¦°ë‹¤ 
 void CDarkNamerDlg::ListDown()
 {
 	int nItem=m_list.GetNextItem(m_list.GetItemCount()-2, LVNI_SELECTED);
@@ -1073,18 +1083,18 @@ void CDarkNamerDlg::ListDown()
 void CDarkNamerDlg::NameAddNum()
 {
 	CDlgInput dlg;
-	dlg.InitInputDlg(_T("ºÙÀÏ ¼ıÀÚÀÇ ÀÚ¸®¼ö¿Í ½ÃÀÛ°ªÀ» ÁöÁ¤ÇÕ´Ï´Ù."), _T("ÀÚ¸®¼ö"), _T("½ÃÀÛ°ª"));
-	dlg.m_aCombo.Add(_T("ÀÌ¸§µÚ¿¡ ¹øÈ£ºÙÀÓ"));
-	dlg.m_aCombo.Add(_T("ÀÌ¸§¾Õ¿¡ ¹øÈ£ºÙÀÓ"));
-	dlg.m_aCombo.Add(_T("Æú´õº°·Î µÚ ¹øÈ£ºÙÀÓ"));
-	dlg.m_aCombo.Add(_T("Æú´õº°·Î ¾Õ ¹øÈ£ºÙÀÓ"));
+	dlg.InitInputDlg(_T("ë¶™ì¼ ìˆ«ìì˜ ìë¦¬ìˆ˜ì™€ ì‹œì‘ê°’ì„ ì§€ì •í•©ë‹ˆë‹¤."), _T("ìë¦¬ìˆ˜"), _T("ì‹œì‘ê°’"));
+	dlg.m_aCombo.Add(_T("ì´ë¦„ë’¤ì— ë²ˆí˜¸ë¶™ì„"));
+	dlg.m_aCombo.Add(_T("ì´ë¦„ì•ì— ë²ˆí˜¸ë¶™ì„"));
+	dlg.m_aCombo.Add(_T("í´ë”ë³„ë¡œ ë’¤ ë²ˆí˜¸ë¶™ì„"));
+	dlg.m_aCombo.Add(_T("í´ë”ë³„ë¡œ ì• ë²ˆí˜¸ë¶™ì„"));
 
 	if (dlg.DoModal()==IDCANCEL) return;
 	int nDigit=_ttoi(dlg.m_strReturn1);
 	int nStart=_ttoi(dlg.m_strReturn2);
 	if (nDigit<=0) 
 	{
-		AfxMessageBox(_T("ÀÚ¸®¼ö ÀÔ·ÂÀÌ Àß¸øµÇ¾ú½À´Ï´Ù."));
+		AfxMessageBox(_T("ìë¦¬ìˆ˜ ì…ë ¥ì´ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤."));
 		return;
 	}
 	if (nStart<=0) nStart=0;
@@ -1096,7 +1106,7 @@ void CDarkNamerDlg::NameAddNum()
 	{
 		if (dlg.m_nCB>1 && i>0) //dlg.m_nCB==2 || dlg.m_nCB==3 
 		{
-			//Æú´õº° ¹øÈ£ ºÙÀÌ±â ±â´É
+			//í´ë”ë³„ ë²ˆí˜¸ ë¶™ì´ê¸° ê¸°ëŠ¥
 			if (m_list.GetItemText(i-1,COL_ROOTPATH).CompareNoCase(m_list.GetItemText(i,COL_ROOTPATH))!=0) nCurrent=nStart;
 		}
 		CListItem* pItem=(CListItem*)m_list.GetItemData(i);
@@ -1104,8 +1114,8 @@ void CDarkNamerDlg::NameAddNum()
 		strExt=Get_Ext(m_list.GetItemText(i,COL_NEWNAME), pItem->bIsDirectory);
 		strTemp.Format(_T("%d"),nCurrent);
 		while(nDigit>strTemp.GetLength()) strTemp=_T('0')+strTemp;
-		if (dlg.m_nCB==0 || dlg.m_nCB==2)	strName+=strTemp; //µÚ¿¡ ºÙÀÌ±â
-		else								strName=strTemp+strName; //¾Õ¿¡ ºÙÀÌ±â
+		if (dlg.m_nCB==0 || dlg.m_nCB==2)	strName+=strTemp; //ë’¤ì— ë¶™ì´ê¸°
+		else								strName=strTemp+strName; //ì•ì— ë¶™ì´ê¸°
 		if (strExt.IsEmpty()==FALSE) strName+=strExt;
 		m_list.SetItemText(i, COL_NEWNAME, strName);
 
@@ -1114,7 +1124,7 @@ void CDarkNamerDlg::NameAddNum()
 	m_list.SetRedraw(TRUE);
 }
 
-void CDarkNamerDlg::NameEmpty() //¹Ù²Ü ÀÌ¸§ ºÎºĞÀ» È®ÀåÀÚ¸¸ Á¦¿ÜÇÏ°í ¸ğµÎ Áö¿î´Ù
+void CDarkNamerDlg::NameEmpty() //ë°”ê¿€ ì´ë¦„ ë¶€ë¶„ì„ í™•ì¥ìë§Œ ì œì™¸í•˜ê³  ëª¨ë‘ ì§€ìš´ë‹¤
 {
 	CString strExt;
 	m_list.SetRedraw(FALSE);
@@ -1126,8 +1136,8 @@ void CDarkNamerDlg::NameEmpty() //¹Ù²Ü ÀÌ¸§ ºÎºĞÀ» È®ÀåÀÚ¸¸ Á¦¿ÜÇÏ°í ¸ğµÎ Áö¿î´Ù
 	m_list.SetRedraw(TRUE);
 }
 
-//nMode=0 : Å¬¸³º¸µå·Î ÆÄÀÏ¸í ÀúÀå, nMode=1 : ÆÄÀÏ·Î ÆÄÀÏ¸í ÀúÀå
-//nMode=2 : Å¬¸³º¸µå·Î °æ·Î¸í ÀúÀå, nMode=3 : ÆÄÀÏ·Î °æ·Î¸í ÀúÀå
+//nMode=0 : í´ë¦½ë³´ë“œë¡œ íŒŒì¼ëª… ì €ì¥, nMode=1 : íŒŒì¼ë¡œ íŒŒì¼ëª… ì €ì¥
+//nMode=2 : í´ë¦½ë³´ë“œë¡œ ê²½ë¡œëª… ì €ì¥, nMode=3 : íŒŒì¼ë¡œ ê²½ë¡œëª… ì €ì¥
 void CDarkNamerDlg::Export(int nMode)
 {
 	CString strData;
@@ -1154,20 +1164,20 @@ void CDarkNamerDlg::Export(int nMode)
 	{
 		CFileDialog dlg(FALSE, _T("txt"), NULL, OFN_ENABLESIZING|OFN_LONGNAMES|OFN_OVERWRITEPROMPT|OFN_HIDEREADONLY ,_T("Text Files(*.txt)|*.txt|All Files(*.*)|*.*||"),NULL);
 
-		if (nMode==1)	dlg.m_ofn.lpstrTitle=_T("ÆÄÀÏ¸í ÀúÀå");
-		else			dlg.m_ofn.lpstrTitle=_T("°æ·Î¸í ÀúÀå"); //nMode==3
+		if (nMode==1)	dlg.m_ofn.lpstrTitle=_T("íŒŒì¼ëª… ì €ì¥");
+		else			dlg.m_ofn.lpstrTitle=_T("ê²½ë¡œëª… ì €ì¥"); //nMode==3
 		if (dlg.DoModal()==IDCANCEL) return;
 		WriteCStringToFile(dlg.GetPathName(), strData);
 	}
 }
 
-//ÆÄÀÏ¸íÀ» ÅØ½ºÆ® ÆÄÀÏ¿¡¼­ ÀĞ¾î¿Í¼­ Â÷·Ê´ë·Î »õ·Î ¹Ù²ğ ÀÌ¸§ÀÎ COL_NEWNAME À» ¼öÁ¤ÇÑ´Ù
-//ÅØ½ºÆ® ÆÄÀÏÀº ÀÌ¸§ ÇÏ³ª´ç ¿£ÅÍ(\n)·Î ±¸ºĞÇØ¼­ ÀúÀåÇÑ Å¸ÀÔ
-//ÇöÀç ¸®½ºÆ®¿¡ ÀÖ´Â °³¼ö¸¸Å­ ÀĞ¾î¿Â´Ù
+//íŒŒì¼ëª…ì„ í…ìŠ¤íŠ¸ íŒŒì¼ì—ì„œ ì½ì–´ì™€ì„œ ì°¨ë¡€ëŒ€ë¡œ ìƒˆë¡œ ë°”ë€” ì´ë¦„ì¸ COL_NEWNAME ì„ ìˆ˜ì •í•œë‹¤
+//í…ìŠ¤íŠ¸ íŒŒì¼ì€ ì´ë¦„ í•˜ë‚˜ë‹¹ ì—”í„°(\n)ë¡œ êµ¬ë¶„í•´ì„œ ì €ì¥í•œ íƒ€ì…
+//í˜„ì¬ ë¦¬ìŠ¤íŠ¸ì— ìˆëŠ” ê°œìˆ˜ë§Œí¼ ì½ì–´ì˜¨ë‹¤
 void CDarkNamerDlg::ImportName()
 {
 	CFileDialog dlg(TRUE, _T("*.txt"), NULL, OFN_ENABLESIZING|OFN_LONGNAMES|OFN_FILEMUSTEXIST|OFN_HIDEREADONLY ,_T("Text Files(*.txt)|*.txt|All Files(*.*)|*.*||"),NULL);
-	dlg.m_ofn.lpstrTitle=_T("¹Ù²Ü ÆÄÀÏ ÀÌ¸§ ºÒ·¯¿À±â");
+	dlg.m_ofn.lpstrTitle=_T("ë°”ê¿€ íŒŒì¼ ì´ë¦„ ë¶ˆëŸ¬ì˜¤ê¸°");
 	if (dlg.DoModal()==IDCANCEL) return;
 	CString strData, strName;
 	ReadFileToCString(dlg.GetPathName(), strData);
@@ -1180,8 +1190,8 @@ void CDarkNamerDlg::ImportName()
 		strName.TrimLeft();strName.TrimRight();
 		if (strName.IsEmpty()==FALSE)
 		{
-			//¿ø·¡ ÀÌ¸§ÀÌ Á¸ÀçÇØ¾ß¸¸ ÇÏ¹Ç·Î ¸Ç À§ºÎÅÍ ±³Ã¼ÇÏ´Â Çü½Ä
-			if (i>=m_list.GetItemCount()) break; //¸®½ºÆ® ³Ñ¾î°¡¸é ³¡
+			//ì›ë˜ ì´ë¦„ì´ ì¡´ì¬í•´ì•¼ë§Œ í•˜ë¯€ë¡œ ë§¨ ìœ„ë¶€í„° êµì²´í•˜ëŠ” í˜•ì‹
+			if (i>=m_list.GetItemCount()) break; //ë¦¬ìŠ¤íŠ¸ ë„˜ì–´ê°€ë©´ ë
 			m_list.SetItemText(i, COL_NEWNAME, strName);
 			i++;
 		}
@@ -1189,12 +1199,12 @@ void CDarkNamerDlg::ImportName()
 	m_list.SetRedraw(TRUE);
 }
 
-//°æ·Î¸íÀ» ÅØ½ºÆ® ÆÄÀÏ¿¡¼­ ÀĞ¾î¿Í¼­ ÇöÀç ¸ñ·Ï µÚ¿¡ Ãß°¡ÇÑ´Ù
-//ÅØ½ºÆ® ÆÄÀÏÀº ÀÌ¸§ ÇÏ³ª´ç ¿£ÅÍ(\n)·Î ±¸ºĞÇØ¼­ ÀúÀåÇÑ Å¸ÀÔ
+//ê²½ë¡œëª…ì„ í…ìŠ¤íŠ¸ íŒŒì¼ì—ì„œ ì½ì–´ì™€ì„œ í˜„ì¬ ëª©ë¡ ë’¤ì— ì¶”ê°€í•œë‹¤
+//í…ìŠ¤íŠ¸ íŒŒì¼ì€ ì´ë¦„ í•˜ë‚˜ë‹¹ ì—”í„°(\n)ë¡œ êµ¬ë¶„í•´ì„œ ì €ì¥í•œ íƒ€ì…
 void CDarkNamerDlg::ImportPath()
 {
 	CFileDialog dlg(TRUE, _T("*.txt"), NULL, OFN_ENABLESIZING|OFN_LONGNAMES|OFN_FILEMUSTEXIST|OFN_HIDEREADONLY ,_T("Text Files(*.txt)|*.txt|All Files(*.*)|*.*||"),NULL);
-	dlg.m_ofn.lpstrTitle=_T("ÆÄÀÏ¿¡¼­ °æ·Î¸ñ·Ï ÀĞ¾î Ãß°¡ÇÏ±â");
+	dlg.m_ofn.lpstrTitle=_T("íŒŒì¼ì—ì„œ ê²½ë¡œëª©ë¡ ì½ì–´ ì¶”ê°€í•˜ê¸°");
 	if (dlg.DoModal()==IDCANCEL) return;
 	CString strImportData;
 	ReadFileToCString(dlg.GetPathName(), strImportData);
@@ -1204,14 +1214,14 @@ void CDarkNamerDlg::ImportPath()
 	int nPos = 0;
 	CListItemArray aFile;
 
-	SetDlgItemText(IDC_ST_BAR, _T("Ã³¸®Áß..."));
+	SetDlgItemText(IDC_ST_BAR, _T("ì²˜ë¦¬ì¤‘..."));
 	while(nPos!=-1)
 	{
 		nPos=GetLine(strData, nPos, strFile, _T("\n"));
 		strFile.TrimLeft();strFile.TrimRight();
 		if (strFile.IsEmpty()==FALSE)
 		{
-			//ÇöÀç ¸®½ºÆ® Áß¿¡ °°Àº ÀÌ¸§ÀÌ ÀÖ´ÂÁö È®ÀÎÇÑ´Ù
+			//í˜„ì¬ ë¦¬ìŠ¤íŠ¸ ì¤‘ì— ê°™ì€ ì´ë¦„ì´ ìˆëŠ”ì§€ í™•ì¸í•œë‹¤
 			BOOL b=TRUE;
 			for (int j=0; j<m_list.GetItemCount(); j++)
 			{
@@ -1221,7 +1231,7 @@ void CDarkNamerDlg::ImportPath()
 					break;
 				}
 			}
-			//°°Àº ÀÌ¸§ÀÌ ¾ø´Â °æ¿ì Á¸Àç¿©ºÎ È®ÀÎ °â µğ·ºÅä¸® ¿©ºÎ ÆÇÁ¤
+			//ê°™ì€ ì´ë¦„ì´ ì—†ëŠ” ê²½ìš° ì¡´ì¬ì—¬ë¶€ í™•ì¸ ê²¸ ë””ë ‰í† ë¦¬ ì—¬ë¶€ íŒì •
 			if (b==TRUE) 
 			{
 				DWORD dwAttribute=GetFileAttributes(strFile);
@@ -1234,7 +1244,7 @@ void CDarkNamerDlg::ImportPath()
 		}
 	}
 	SetDlgItemText(IDC_ST_BAR, _T(""));
-	//¸®½ºÆ®¿¡ ÆÄÀÏÀ» Ãß°¡ÇÑ´Ù
+	//ë¦¬ìŠ¤íŠ¸ì— íŒŒì¼ì„ ì¶”ê°€í•œë‹¤
 	m_list.SetRedraw(FALSE);
 	CListItemArray::iterator it=aFile.begin();
 	while (it!=aFile.end())	{FileListAdd(*(it)); it++;};
@@ -1242,18 +1252,18 @@ void CDarkNamerDlg::ImportPath()
 }
 
 
-//ÆÄÀÏÀÇ °æ·Î¸¦ ÇÏ³ª·Î ÅëÀÏ. ÀÏÁ¾ÀÇ MoveFileÀÌ µÊ. Áßº¹ Ã¼Å© ÇÊ¿ä
+//íŒŒì¼ì˜ ê²½ë¡œë¥¼ í•˜ë‚˜ë¡œ í†µì¼. ì¼ì¢…ì˜ MoveFileì´ ë¨. ì¤‘ë³µ ì²´í¬ í•„ìš”
 void CDarkNamerDlg::NameSamePath()
 {
-	CFolderDialog dlg(_T("°æ·Î ¼±ÅÃ"));
+	CFolderDialog dlg(_T("ê²½ë¡œ ì„ íƒ"));
 	if (dlg.DoModal()==IDCANCEL) return;
 	CString strPath=dlg.GetPathName();
-	//e:\ °°Àº °æ¿ì¸¦ ´ëºñÇÏ¿© ³¡¿¡ ¿À´Â \¸¦ »èÁ¦
+	//e:\ ê°™ì€ ê²½ìš°ë¥¼ ëŒ€ë¹„í•˜ì—¬ ëì— ì˜¤ëŠ” \ë¥¼ ì‚­ì œ
 	if (strPath.GetAt(strPath.GetLength()-1)==_T('\\')) strPath.Delete(strPath.GetLength()-1);
 	m_list.SetRedraw(FALSE);
 	for (int i=0; i<m_list.GetItemCount(); i++)
 	{
-		//COL_ROOTPATHÀ» º¯°æÇØ ÁÖ¸é ³ªÁß¿¡ ½ÇÁ¦ º¯°æ¶§ ÀÌ°ªÀÌ COL_NEWNAME°ú °áÇÕµÇ¸é¼­ »õ °æ·Î°¡ µÈ´Ù
+		//COL_ROOTPATHì„ ë³€ê²½í•´ ì£¼ë©´ ë‚˜ì¤‘ì— ì‹¤ì œ ë³€ê²½ë•Œ ì´ê°’ì´ COL_NEWNAMEê³¼ ê²°í•©ë˜ë©´ì„œ ìƒˆ ê²½ë¡œê°€ ëœë‹¤
 		m_list.SetItemText(i, COL_ROOTPATH, strPath); 
 	}
 	m_list.SetRedraw(TRUE);
@@ -1262,9 +1272,9 @@ void CDarkNamerDlg::NameSamePath()
 void CDarkNamerDlg::NameDelPos()
 {
 	CDlgInput dlg;
-	dlg.InitInputDlg(_T("ÁöÁ¤À§Ä¡¸¦ »èÁ¦ÇÕ´Ï´Ù.(Ã¹±ÛÀÚ´Â 1¹øÂ°)"), _T("¹øÂ°ºÎÅÍ"), _T("¹øÂ°±îÁö"));
-	dlg.m_aCombo.Add(_T("¾Õ¿¡¼­ºÎÅÍ »èÁ¦"));
-	dlg.m_aCombo.Add(_T("Á¦ÀÏ µÚºÎÅÍ »èÁ¦"));
+	dlg.InitInputDlg(_T("ì§€ì •ìœ„ì¹˜ë¥¼ ì‚­ì œí•©ë‹ˆë‹¤.(ì²«ê¸€ìëŠ” 1ë²ˆì§¸)"), _T("ë²ˆì§¸ë¶€í„°"), _T("ë²ˆì§¸ê¹Œì§€"));
+	dlg.m_aCombo.Add(_T("ì•ì—ì„œë¶€í„° ì‚­ì œ"));
+	dlg.m_aCombo.Add(_T("ì œì¼ ë’¤ë¶€í„° ì‚­ì œ"));
 	if (dlg.DoModal()==IDCANCEL) return;
 
 	int nStart=_ttoi(dlg.m_strReturn1);
@@ -1272,11 +1282,11 @@ void CDarkNamerDlg::NameDelPos()
 	if (nStart==0 && nEnd==0) return;
 
 	if ( nStart<0 || nEnd<0 )
-		{AfxMessageBox(_T("À½¼ö°ªÀÌ³ª Àß¸øµÈ °ªÀÌ ÀÔ·ÂµÇ¾ú½À´Ï´Ù."));return;}
+		{AfxMessageBox(_T("ìŒìˆ˜ê°’ì´ë‚˜ ì˜ëª»ëœ ê°’ì´ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤."));return;}
 	if ( dlg.m_nCB==0 && nEnd>0 && nStart>nEnd )
-		{AfxMessageBox(_T("½ÃÀÛÁ¡ÀÌ ³¡Á¡º¸´Ù µÚ¿¡ ÀÖ½À´Ï´Ù."));return;}
+		{AfxMessageBox(_T("ì‹œì‘ì ì´ ëì ë³´ë‹¤ ë’¤ì— ìˆìŠµë‹ˆë‹¤."));return;}
 	if ( dlg.m_nCB==1 && nStart!=0 )
-		{AfxMessageBox(_T("¸Ç µÚ¿¡¼­ºÎÅÍ »èÁ¦ÇÒ¶§´Â '~±îÁö'¸¸ ÇÊ¿äÇÕ´Ï´Ù."));return;}
+		{AfxMessageBox(_T("ë§¨ ë’¤ì—ì„œë¶€í„° ì‚­ì œí• ë•ŒëŠ” '~ê¹Œì§€'ë§Œ í•„ìš”í•©ë‹ˆë‹¤."));return;}
 
 	CString strName, strExt;
 
@@ -1287,7 +1297,7 @@ void CDarkNamerDlg::NameDelPos()
 		strName=Get_Name(m_list.GetItemText(i, COL_NEWNAME), pItem->bIsDirectory);
 		strExt=Get_Ext(m_list.GetItemText(i, COL_NEWNAME), pItem->bIsDirectory);
 
-		if (dlg.m_nCB==0)	//¾ÕÀÇ nºÎÅÍ m±îÁö
+		if (dlg.m_nCB==0)	//ì•ì˜ në¶€í„° mê¹Œì§€
 		{
 			if (nStart==0) nStart=1;
 			int nLen=strName.GetLength();
@@ -1297,7 +1307,7 @@ void CDarkNamerDlg::NameDelPos()
 				strName.Delete(nStart-1, nLen-nStart+1);
 			}
 		}
-		else if (dlg.m_nCB==1) //µÚÀÇ n°³
+		else if (dlg.m_nCB==1) //ë’¤ì˜ nê°œ
 		{
 			int nLen=strName.GetLength();
 			if (nEnd<nLen) nLen=nEnd;
@@ -1313,12 +1323,12 @@ void CDarkNamerDlg::NameDelPos()
 void CDarkNamerDlg::NameDelToken()
 {
 	CDlgInput dlg;
-	dlg.InitInputDlg(_T("ÁöÁ¤µÈ ¹®ÀÚ·Î ¹­ÀÎ ºÎºĞÀ» »èÁ¦ÇÕ´Ï´Ù."), _T(":½ÃÀÛ¹®ÀÚ"), _T(":³¡¹®ÀÚ"));
+	dlg.InitInputDlg(_T("ì§€ì •ëœ ë¬¸ìë¡œ ë¬¶ì¸ ë¶€ë¶„ì„ ì‚­ì œí•©ë‹ˆë‹¤."), _T(":ì‹œì‘ë¬¸ì"), _T(":ëë¬¸ì"));
 
 	if (dlg.DoModal()==IDCANCEL) return;
 	if (dlg.m_strReturn1.IsEmpty() || dlg.m_strReturn2.IsEmpty())
 	{
-		AfxMessageBox(_T("½ÃÀÛ/³¡ ¹®ÀÚ°¡ Á¤È®ÇÏ°Ô ÁöÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù."));
+		AfxMessageBox(_T("ì‹œì‘/ë ë¬¸ìê°€ ì •í™•í•˜ê²Œ ì§€ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤."));
 		return;
 	}
 
@@ -1356,21 +1366,21 @@ void CDarkNamerDlg::NameDelToken()
 	m_list.SetRedraw(TRUE);
 }
 
-//¸®½ºÆ®¸¦ Á¤ÇØÁø ±âÁØ¿¡ µû¶ó Á¤·ÄÇÑ´Ù
+//ë¦¬ìŠ¤íŠ¸ë¥¼ ì •í•´ì§„ ê¸°ì¤€ì— ë”°ë¼ ì •ë ¬í•œë‹¤
 void CDarkNamerDlg::SortList()
 {
 	CDlgInput dlg;
-	dlg.InitInputDlg(_T("Á¤·Ä ±âÁØ ¼³Á¤"), _T(""), _T(""));
-	dlg.m_aCombo.Add(_T("ÆÄÀÏ ÀÌ¸§¿¡ µû¶ó ¿À¸§Â÷¼ø"));
-	dlg.m_aCombo.Add(_T("ÆÄÀÏ ÀÌ¸§¿¡ µû¶ó ³»¸²Â÷¼ø"));
-	dlg.m_aCombo.Add(_T("ÀüÃ¼°æ·Î¿¡ µû¶ó ¿À¸§Â÷¼ø"));
-	dlg.m_aCombo.Add(_T("ÀüÃ¼°æ·Î¿¡ µû¶ó ³»¸²Â÷¼ø"));
-	dlg.m_aCombo.Add(_T("ÆÄÀÏ Å©±â¿¡ µû¶ó ¿À¸§Â÷¼ø"));
-	dlg.m_aCombo.Add(_T("ÆÄÀÏ Å©±â¿¡ µû¶ó ³»¸²Â÷¼ø"));
-	dlg.m_aCombo.Add(_T("¼öÁ¤ÇÑ ½Ã°¢¿¡ µû¶ó ¿À¸§Â÷¼ø"));
-	dlg.m_aCombo.Add(_T("¼öÁ¤ÇÑ ½Ã°¢¿¡ µû¶ó ³»¸²Â÷¼ø"));
-	dlg.m_aCombo.Add(_T("¸¸µç ½Ã°¢¿¡ µû¶ó ¿À¸§Â÷¼ø"));
-	dlg.m_aCombo.Add(_T("¸¸µç ½Ã°¢¿¡ µû¶ó ³»¸²Â÷¼ø"));
+	dlg.InitInputDlg(_T("ì •ë ¬ ê¸°ì¤€ ì„¤ì •"), _T(""), _T(""));
+	dlg.m_aCombo.Add(_T("íŒŒì¼ ì´ë¦„ì— ë”°ë¼ ì˜¤ë¦„ì°¨ìˆœ"));
+	dlg.m_aCombo.Add(_T("íŒŒì¼ ì´ë¦„ì— ë”°ë¼ ë‚´ë¦¼ì°¨ìˆœ"));
+	dlg.m_aCombo.Add(_T("ì „ì²´ê²½ë¡œì— ë”°ë¼ ì˜¤ë¦„ì°¨ìˆœ"));
+	dlg.m_aCombo.Add(_T("ì „ì²´ê²½ë¡œì— ë”°ë¼ ë‚´ë¦¼ì°¨ìˆœ"));
+	dlg.m_aCombo.Add(_T("íŒŒì¼ í¬ê¸°ì— ë”°ë¼ ì˜¤ë¦„ì°¨ìˆœ"));
+	dlg.m_aCombo.Add(_T("íŒŒì¼ í¬ê¸°ì— ë”°ë¼ ë‚´ë¦¼ì°¨ìˆœ"));
+	dlg.m_aCombo.Add(_T("ìˆ˜ì •í•œ ì‹œê°ì— ë”°ë¼ ì˜¤ë¦„ì°¨ìˆœ"));
+	dlg.m_aCombo.Add(_T("ìˆ˜ì •í•œ ì‹œê°ì— ë”°ë¼ ë‚´ë¦¼ì°¨ìˆœ"));
+	dlg.m_aCombo.Add(_T("ë§Œë“  ì‹œê°ì— ë”°ë¼ ì˜¤ë¦„ì°¨ìˆœ"));
+	dlg.m_aCombo.Add(_T("ë§Œë“  ì‹œê°ì— ë”°ë¼ ë‚´ë¦¼ì°¨ìˆœ"));
 
 	if (dlg.DoModal()==IDCANCEL) return;
 	
@@ -1397,15 +1407,15 @@ void CDarkNamerDlg::SortList()
 
 int CALLBACK CDarkNamerDlg::Compare(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
-	//lParam1, lParam2´Â ºñ±³µÉ µÎ ¸®½ºÆ® Ç×¸ñÀÇ ItemData°ª
-	//ÁÖ·Î ÇØ´ç Ç×¸ñÀÇ ÀÎµ¦½º °ªÀ» ±×´ë·Î ³Ö¾î¼­ ¾´´Ù
-	//lParamSort´Â SortItemsÀÇ µÎ¹øÂ° ÀÎÀÚ°ª(ÁÖ·Î ÇØ´ç ¸®½ºÆ® Æ÷ÀÎÅÍ)
+	//lParam1, lParam2ëŠ” ë¹„êµë  ë‘ ë¦¬ìŠ¤íŠ¸ í•­ëª©ì˜ ItemDataê°’
+	//ì£¼ë¡œ í•´ë‹¹ í•­ëª©ì˜ ì¸ë±ìŠ¤ ê°’ì„ ê·¸ëŒ€ë¡œ ë„£ì–´ì„œ ì“´ë‹¤
+	//lParamSortëŠ” SortItemsì˜ ë‘ë²ˆì§¸ ì¸ìê°’(ì£¼ë¡œ í•´ë‹¹ ë¦¬ìŠ¤íŠ¸ í¬ì¸í„°)
 	CSortInfo* psi=(CSortInfo*)lParamSort;
 	CListItem* pItem1=(CListItem*)lParam1;
 	CListItem* pItem2=(CListItem*)lParam2;
 
 	int nOrder;
-	//Ä®·³ Á¾·ù¿¡ µû¶ó ºñ±³ ¹æ¹ı ¹Ù²Ù±â
+	//ì¹¼ëŸ¼ ì¢…ë¥˜ì— ë”°ë¼ ë¹„êµ ë°©ë²• ë°”ê¾¸ê¸°
 	switch (psi->nSortType)
 	{
 	case COL_OLDNAME:
@@ -1429,7 +1439,7 @@ int CALLBACK CDarkNamerDlg::Compare(LPARAM lParam1, LPARAM lParam2, LPARAM lPara
 		break;
 	}
 
-	nOrder=nOrder * psi->nAsc; //¿À¸§Â÷¼ø, ³»¸²Â÷¼øÀÇ ¹İ¿µ
+	nOrder=nOrder * psi->nAsc; //ì˜¤ë¦„ì°¨ìˆœ, ë‚´ë¦¼ì°¨ìˆœì˜ ë°˜ì˜
 	return nOrder; //lParamSort is ASC / DSC
 }
 
@@ -1446,7 +1456,7 @@ void CDarkNamerDlg::UpdateColumn(int nCol)
 
 
 	int nCount=m_list.GetItemCount();
-	//¸Ç ³¡ ¾ÆÀÌÅÛÀ» °Ë»çÇØ¼­ ³»¿ëÀÌ ÀÌ¹Ì Ã¤¿öÁ® ÀÖÀ¸¸é ÆĞ½º ¾Æ´Ï¸é »õ·Î Ã¤¿î´Ù
+	//ë§¨ ë ì•„ì´í…œì„ ê²€ì‚¬í•´ì„œ ë‚´ìš©ì´ ì´ë¯¸ ì±„ì›Œì ¸ ìˆìœ¼ë©´ íŒ¨ìŠ¤ ì•„ë‹ˆë©´ ìƒˆë¡œ ì±„ìš´ë‹¤
 	if (nCount>1)
 	{
 		if (m_list.GetItemText(nCount-1, nCol).IsEmpty()==FALSE) return;
@@ -1572,6 +1582,6 @@ void CDarkNamerDlg::UpdateCount(int nCount)
 		strTemp.Empty();
 		UpdateMenu();
 	}
-	else strTemp.Format(_T("%d °³"), nCount);
+	else strTemp.Format(_T("%d ê°œ"), nCount);
 	SetDlgItemText(IDC_ST_BAR, strTemp);
 }

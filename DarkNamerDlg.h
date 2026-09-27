@@ -1,4 +1,4 @@
-// DarkNamerDlg.h : header file
+ï»¿// DarkNamerDlg.h : header file
 //
 
 #if !defined(AFX_DARKNAMERDLG_H__EEA38216_4BCB_45BD_840B_8BB08E72E82C__INCLUDED_)
@@ -10,18 +10,18 @@
 
 struct CListItem 
 {
-	TCHAR strPath[_MAX_PATH];	//ÆÄÀÏÀÇ °æ·Î
-	FILETIME timeCreated;		//»ı¼º ½Ã±â
-	FILETIME timeModified;		//º¯°æ ½Ã±â
-	DWORD dwSize;				//ÆÄÀÏÀÇ Å©±â 
-	BOOL bIsDirectory;			//µğ·ºÅä¸®ÀÎ°¡
+	TCHAR strPath[_MAX_PATH];	//íŒŒì¼ì˜ ê²½ë¡œ
+	FILETIME timeCreated;		//ìƒì„± ì‹œê¸°
+	FILETIME timeModified;		//ë³€ê²½ ì‹œê¸°
+	DWORD dwSize;				//íŒŒì¼ì˜ í¬ê¸° 
+	BOOL bIsDirectory;			//ë””ë ‰í† ë¦¬ì¸ê°€
 };
-//Á¤·ÄÀ» À§ÇØ Compare¿¡ ³Ñ°ÜÁÖ´Â Á¤º¸
+//ì •ë ¬ì„ ìœ„í•´ Compareì— ë„˜ê²¨ì£¼ëŠ” ì •ë³´
 struct CSortInfo
 {
-	CListCtrl* plist;	//ÇØ´ç ¸®½ºÆ® ÄÁÆ®·Ñ
-	int nAsc;			//Á¤·Ä ¹æ½Ä( 1 ÀÌ¸é ¿À¸§Â÷¼ø, -1 ÀÌ¸é ³»¸²Â÷¼ø )
-	int nSortType;		//Á¤·Ä ±âÁØ
+	CListCtrl* plist;	//í•´ë‹¹ ë¦¬ìŠ¤íŠ¸ ì»¨íŠ¸ë¡¤
+	int nAsc;			//ì •ë ¬ ë°©ì‹( 1 ì´ë©´ ì˜¤ë¦„ì°¨ìˆœ, -1 ì´ë©´ ë‚´ë¦¼ì°¨ìˆœ )
+	int nSortType;		//ì •ë ¬ ê¸°ì¤€
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ class CDarkNamerDlg : public CDialog
 public:
 	void UpdateCount(int nCount);
 	void UpdateMenu();
-	//¸®½ºÆ®¿¡ ÀĞ¾îµéÀÎ ÇØ´ç ÆÄÀÏ Ç×¸ñÀÇ Á¤º¸
+	//ë¦¬ìŠ¤íŠ¸ì— ì½ì–´ë“¤ì¸ í•´ë‹¹ íŒŒì¼ í•­ëª©ì˜ ì •ë³´
 	void ArrangeCtrl();
 	CDarkNamerDlg(CWnd* pParent = NULL);	// standard constructor
 	CToolBar m_tool1;
@@ -42,6 +42,7 @@ public:
 	//{{AFX_DATA(CDarkNamerDlg)
 	enum { IDD = IDD_DARKNAMER_DIALOG };
 	CListCtrl	m_list;
+	CFont	m_fontList;	// ëª©ë¡ ê¸€ê¼´
 	//}}AFX_DATA
 
 	// ClassWizard generated virtual function overrides
@@ -91,7 +92,7 @@ protected:
 	void NameReplace();
 	void ClearList();
 	CImageList m_img;
-	int m_nShowFlag; //Ãß°¡·Î Ç¥½ÃÇÒ Ä®·³ ÇÃ·¡±×
+	int m_nShowFlag; //ì¶”ê°€ë¡œ í‘œì‹œí•  ì¹¼ëŸ¼ í”Œë˜ê·¸
 
 	static int CALLBACK Compare(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 	// Generated message map functions

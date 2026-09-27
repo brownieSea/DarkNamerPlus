@@ -18,7 +18,7 @@
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
 #ifdef _WIN32
 LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
-#pragma code_page(949)
+#pragma code_page(65001)
 #endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
@@ -48,7 +48,7 @@ BEGIN
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)\r\n"
     "#ifdef _WIN32\r\n"
     "LANGUAGE 18, 1\r\n"
-    "#pragma code_page(949)\r\n"
+    "#pragma code_page(65001)\r\n"
     "#endif //_WIN32\r\n"
     "#include ""res\\DarkNamer.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
     "#include ""l.kor\\afxres.rc""          // Standard components\r\n"
@@ -90,15 +90,15 @@ END
 IDD_INPUT DIALOGEX 0, 0, 181, 86
 STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_TOOLWINDOW
-CAPTION "ÀÔ·ÂÃ¢"
+CAPTION "ìž…ë ¥ì°½"
 FONT 10, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_EDIT_1,5,25,136,14,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT_2,5,41,136,14,ES_AUTOHSCROLL
     COMBOBOX        IDC_CB_INPUT,5,67,85,151,CBS_DROPDOWN | CBS_SORT | 
                     WS_VSCROLL | WS_TABSTOP
-    DEFPUSHBUTTON   "È®ÀÎ",IDOK,94,65,40,17
-    PUSHBUTTON      "Ãë¼Ò",IDCANCEL,136,65,40,17
+    DEFPUSHBUTTON   "í™•ì¸",IDOK,94,65,40,17
+    PUSHBUTTON      "ì·¨ì†Œ",IDCANCEL,136,65,40,17
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,61,181,1
     LTEXT           "Static",IDC_STATIC_TITLE,6,8,162,8,SS_CENTERIMAGE
     LTEXT           "Static",IDC_STATIC_1,143,25,38,14,SS_CENTERIMAGE
@@ -161,63 +161,63 @@ IDR_TOOLBAR2            BITMAP  DISCARDABLE     "res\\toolbar2.bmp"
 
 IDR_MENU_MAIN MENU DISCARDABLE 
 BEGIN
-    POPUP "ÆÄÀÏ(&F)"
+    POPUP "íŒŒì¼(&F)"
     BEGIN
-        MENUITEM "°æ·Î¸ñ·Ï¿¡ ÆÄÀÏ Ãß°¡ÇÏ±â\tCtrl+O", IDM_LIST_ADD
+        MENUITEM "ê²½ë¡œëª©ë¡ì— íŒŒì¼ ì¶”ê°€í•˜ê¸°\tCtrl+O", IDM_LIST_ADD
         MENUITEM SEPARATOR
-        MENUITEM "½ÇÁ¦ ÆÄÀÏ º¯°æ\tCtrl+S",      IDM_APPLY_CHANGE
-        MENUITEM "¿ø·¡ ÀÌ¸§À¸·Î\tCtrl+Z",       IDM_INIT_LIST
-        MENUITEM "°æ·Î¸ñ·Ï Áö¿ì±â\tCtrl+L",     IDM_CLEAR_LIST
-        MENUITEM "°æ·Î¸ñ·Ï Á¤·Ä\tCtrl+A",       IDM_SORT_LIST
+        MENUITEM "ì‹¤ì œ íŒŒì¼ ë³€ê²½\tCtrl+S",      IDM_APPLY_CHANGE
+        MENUITEM "ì›ëž˜ ì´ë¦„ìœ¼ë¡œ\tCtrl+Z",       IDM_INIT_LIST
+        MENUITEM "ê²½ë¡œëª©ë¡ ì§€ìš°ê¸°\tCtrl+L",     IDM_CLEAR_LIST
+        MENUITEM "ê²½ë¡œëª©ë¡ ì •ë ¬\tCtrl+A",       IDM_SORT_LIST
         MENUITEM SEPARATOR
-        MENUITEM "Å¬¸³º¸µå·Î ¹Ù²ÜÀÌ¸§ º¹»ç\tCtrl+C", IDM_EXPORT_CLIP
-        MENUITEM "¹®¼­ÆÄÀÏ·Î ¹Ù²ÜÀÌ¸§ ÀúÀå\tCtrl+X", IDM_EXPORT_FILE
+        MENUITEM "í´ë¦½ë³´ë“œë¡œ ë°”ê¿€ì´ë¦„ ë³µì‚¬\tCtrl+C", IDM_EXPORT_CLIP
+        MENUITEM "ë¬¸ì„œíŒŒì¼ë¡œ ë°”ê¿€ì´ë¦„ ì €ìž¥\tCtrl+X", IDM_EXPORT_FILE
         MENUITEM SEPARATOR
-        MENUITEM "Å¬¸³º¸µå·Î °æ·Î¸ñ·Ï º¹»ç\tCtrl+Shift+C", IDM_EXPORT_CLIP2
-        MENUITEM "¹®¼­ÆÄÀÏ·Î °æ·Î¸ñ·Ï ÀúÀå\tCtrl+Shift+X", IDM_EXPORT_FILE2
+        MENUITEM "í´ë¦½ë³´ë“œë¡œ ê²½ë¡œëª©ë¡ ë³µì‚¬\tCtrl+Shift+C", IDM_EXPORT_CLIP2
+        MENUITEM "ë¬¸ì„œíŒŒì¼ë¡œ ê²½ë¡œëª©ë¡ ì €ìž¥\tCtrl+Shift+X", IDM_EXPORT_FILE2
         MENUITEM SEPARATOR
-        MENUITEM "¹Ù²ÜÀÌ¸§ ºÒ·¯¿À±â\tCtrl+V",   IDM_IMPORT_FILE
-        MENUITEM "°æ·Î¸ñ·Ï ºÒ·¯¿À±â\tCtrl+Shift+V", IDM_IMPORT_FILE2
+        MENUITEM "ë°”ê¿€ì´ë¦„ ë¶ˆëŸ¬ì˜¤ê¸°\tCtrl+V",   IDM_IMPORT_FILE
+        MENUITEM "ê²½ë¡œëª©ë¡ ë¶ˆëŸ¬ì˜¤ê¸°\tCtrl+Shift+V", IDM_IMPORT_FILE2
         MENUITEM SEPARATOR
-        MENUITEM "Á¾·á(&X)\tEsc",               IDCANCEL
+        MENUITEM "ì¢…ë£Œ(&X)\tEsc",               IDCANCEL
     END
-    POPUP "ÆíÁý(&E)"
+    POPUP "íŽ¸ì§‘(&E)"
     BEGIN
-        MENUITEM "À§·Î ¿Ã¸²\t<",                IDM_EDIT_UP
-        MENUITEM "¾Æ·¡·Î ³»¸²\t>",              IDM_EDIT_DOWN
+        MENUITEM "ìœ„ë¡œ ì˜¬ë¦¼\t<",                IDM_EDIT_UP
+        MENUITEM "ì•„ëž˜ë¡œ ë‚´ë¦¼\t>",              IDM_EDIT_DOWN
         MENUITEM SEPARATOR
-        MENUITEM "Á÷Á¢ ¹Ù²Ù±â",                 IDM_MANUAL_CHANGE
+        MENUITEM "ì§ì ‘ ë°”ê¾¸ê¸°",                 IDM_MANUAL_CHANGE
     END
-    POPUP "º¸±â(&V)"
+    POPUP "ë³´ê¸°(&V)"
     BEGIN
-        MENUITEM "ÀüÃ¼ °æ·Î Ç¥½Ã",              IDM_SHOW_FULLPATH
-        MENUITEM "ÆÄÀÏ Å©±â Ç¥½Ã",              IDM_SHOW_SIZE
-        MENUITEM "º¯°æ ½Ã°¢ Ç¥½Ã",              IDM_SHOW_MODIFYTIME
-        MENUITEM "»ý¼º ½Ã°¢ Ç¥½Ã",              IDM_SHOW_CREATETIME
+        MENUITEM "ì „ì²´ ê²½ë¡œ í‘œì‹œ",              IDM_SHOW_FULLPATH
+        MENUITEM "íŒŒì¼ í¬ê¸° í‘œì‹œ",              IDM_SHOW_SIZE
+        MENUITEM "ë³€ê²½ ì‹œê° í‘œì‹œ",              IDM_SHOW_MODIFYTIME
+        MENUITEM "ìƒì„± ì‹œê° í‘œì‹œ",              IDM_SHOW_CREATETIME
     END
-    POPUP "±â´É(&T)"
+    POPUP "ê¸°ëŠ¥(&T)"
     BEGIN
-        MENUITEM "¹®ÀÚ¿­ ¹Ù²Ù±â",               IDM_NAME_REPLACE
-        MENUITEM "¾ÕÀÌ¸§ ºÙÀÌ±â",               IDM_NAME_ADD_FRONT
-        MENUITEM "µÞÀÌ¸§ ºÙÀÌ±â",               IDM_NAME_ADD_REAR
+        MENUITEM "ë¬¸ìžì—´ ë°”ê¾¸ê¸°",               IDM_NAME_REPLACE
+        MENUITEM "ì•žì´ë¦„ ë¶™ì´ê¸°",               IDM_NAME_ADD_FRONT
+        MENUITEM "ë’·ì´ë¦„ ë¶™ì´ê¸°",               IDM_NAME_ADD_REAR
         MENUITEM SEPARATOR
-        MENUITEM "ÀÌ¸§ Áö¿ì±â",                 IDM_NAME_EMPTY
-        MENUITEM "À§Ä¡ Áö¿ì±â",                 IDM_NAME_DELPOS
-        MENUITEM "¹­ÀÎ°÷ Áö¿ì±â",               IDM_NAME_DELTOKEN
+        MENUITEM "ì´ë¦„ ì§€ìš°ê¸°",                 IDM_NAME_EMPTY
+        MENUITEM "ìœ„ì¹˜ ì§€ìš°ê¸°",                 IDM_NAME_DELPOS
+        MENUITEM "ë¬¶ì¸ê³³ ì§€ìš°ê¸°",               IDM_NAME_DELTOKEN
         MENUITEM SEPARATOR
-        MENUITEM "¼ýÀÚ¸¸ ³²±â±â",               IDM_NAME_NUMBER_ONLY
-        MENUITEM "ÀÚ¸®¼ö ¸ÂÃß±â",               IDM_NAME_DIGIT
-        MENUITEM "¹øÈ£ ºÙÀÌ±â",                 IDM_NAME_ADDNUM
+        MENUITEM "ìˆ«ìžë§Œ ë‚¨ê¸°ê¸°",               IDM_NAME_NUMBER_ONLY
+        MENUITEM "ìžë¦¬ìˆ˜ ë§žì¶”ê¸°",               IDM_NAME_DIGIT
+        MENUITEM "ë²ˆí˜¸ ë¶™ì´ê¸°",                 IDM_NAME_ADDNUM
         MENUITEM SEPARATOR
-        MENUITEM "È®ÀåÀÚ »èÁ¦",                 IDM_EXT_DEL
-        MENUITEM "È®ÀåÀÚ Ãß°¡",                 IDM_EXT_ADD
-        MENUITEM "È®ÀåÀÚ º¯°æ",                 IDM_EXT_REPLACE
+        MENUITEM "í™•ìž¥ìž ì‚­ì œ",                 IDM_EXT_DEL
+        MENUITEM "í™•ìž¥ìž ì¶”ê°€",                 IDM_EXT_ADD
+        MENUITEM "í™•ìž¥ìž ë³€ê²½",                 IDM_EXT_REPLACE
         MENUITEM SEPARATOR
-        MENUITEM "°æ·Î¸í ¾Õ¿¡",                 IDM_NAME_ADDPATH
-        MENUITEM "°æ·Î¸í µÚ¿¡",                 IDM_NAME_ADDPATH_BACK
-        MENUITEM "°æ·Î ÅëÀÏÇÏ±â",               IDM_NAME_SAMEPATH
+        MENUITEM "ê²½ë¡œëª… ì•žì—",                 IDM_NAME_ADDPATH
+        MENUITEM "ê²½ë¡œëª… ë’¤ì—",                 IDM_NAME_ADDPATH_BACK
+        MENUITEM "ê²½ë¡œ í†µì¼í•˜ê¸°",               IDM_NAME_SAMEPATH
     END
-    MENUITEM "¹öÀü(H)",                     IDM_VERSION
+    MENUITEM "ë²„ì „(H)",                     IDM_VERSION
 END
 
 
@@ -246,14 +246,14 @@ BEGIN
         BEGIN
             VALUE "Comments", "\0"
             VALUE "CompanyName", "\0"
-            VALUE "FileDescription", "DarkNamer MFC ÀÀ¿ë ÇÁ·Î±×·¥\0"
+            VALUE "FileDescription", "DarkNamer MFC ì‘ìš© í”„ë¡œê·¸ëž¨\0"
             VALUE "FileVersion", "1, 0, 0, 1\0"
             VALUE "InternalName", "DarkNamer\0"
             VALUE "LegalCopyright", "Copyright (C) 2008\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "DarkNamer.EXE\0"
             VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "DarkNamer ÀÀ¿ë ÇÁ·Î±×·¥\0"
+            VALUE "ProductName", "DarkNamer ì‘ìš© í”„ë¡œê·¸ëž¨\0"
             VALUE "ProductVersion", "1, 0, 0, 1\0"
             VALUE "SpecialBuild", "\0"
         END
