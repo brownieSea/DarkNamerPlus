@@ -293,7 +293,7 @@ BOOL CDarkNamerDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 		FlagSET(m_nShowFlag, COL_TIMECREATE, !FlagGET(m_nShowFlag, COL_TIMECREATE));
 		UpdateColumn(COL_TIMECREATE);
 		break;
-	case IDM_VERSION:	AfxMessageBox(_T("DarkNamer 08.02.10 버전")); break;
+	case IDM_VERSION:	AfxMessageBox(_T("DarkNamerPlus 1.0\n\n원작: DarkNamer (darkwalker)\n추가: 와일드카드 바꾸기 (*, **, ?)"), MB_ICONINFORMATION); break;
 	default:
 		return CDialog::OnCommand(wParam, lParam);
 	}
